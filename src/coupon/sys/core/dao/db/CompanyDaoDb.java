@@ -15,6 +15,11 @@ import coupon.sys.core.connectionPool.ConnectionPool;
 import coupon.sys.core.dao.CompanyDao;
 import coupon.sys.core.exceptions.CouponSystemException;
 
+/**
+ * this class implements CompanyDao interface
+ * @author YECHIEL
+ * 
+ */
 public class CompanyDaoDb implements CompanyDao {
 
 	private ConnectionPool connectionpool;
@@ -25,6 +30,9 @@ public class CompanyDaoDb implements CompanyDao {
 	// execute the sql command
 	// return connection to pool
 
+	/**
+	 * this method create a company
+	 */
 	@Override
 	public void createCompany(Company company) throws CouponSystemException {
 		Connection con = null;
@@ -33,7 +41,6 @@ public class CompanyDaoDb implements CompanyDao {
 			con = connectionpool.getConnection();
 			String createCompanySql = "INSERT INTO company VALUES(?,?,?,?)";
 			PreparedStatement pst = con.prepareStatement(createCompanySql);
-			pst.setLong(1, company.getId());
 			pst.setString(2, company.getName());
 			pst.setString(3, company.getPassword());
 			pst.setString(4, company.getEmail());
@@ -41,13 +48,16 @@ public class CompanyDaoDb implements CompanyDao {
 			pst.close();
 		} catch (SQLException e) {
 			throw new CouponSystemException("unable to create a new company[company name: " + company.getName()
-					+ " comapny id: " + company.getId() + "] or get a new DB connection", e);
+					+ "] or get a new DB connection");
 		} finally {
 			connectionpool.returnConnection(con);
 		}
 
 	}
 
+	/**
+	 * this method remove the company
+	 */
 	@Override
 	public void removeCompany(Company company) throws CouponSystemException {
 		Connection con = null;
@@ -60,13 +70,16 @@ public class CompanyDaoDb implements CompanyDao {
 			st.close();
 			System.out.println(company.toString() + " was deleted");
 		} catch (SQLException e) {
-			throw new CouponSystemException("unable to delete company " + company.toString(), e);
+			throw new CouponSystemException("unable to delete company " + company.toString());
 		} finally {
 			connectionpool.returnConnection(con);
 		}
 
 	}
 
+	/**
+	 * this method update the company
+	 */
 	@Override
 	public void updateCompany(Company company) throws CouponSystemException {
 		Connection con = null;
@@ -86,6 +99,9 @@ public class CompanyDaoDb implements CompanyDao {
 
 	}
 
+	/**
+	 * this method gets a specific company by id
+	 */
 	@Override
 	public Company getCompany(long id) throws CouponSystemException {
 		Connection con = null;
@@ -112,6 +128,9 @@ public class CompanyDaoDb implements CompanyDao {
 		return company;
 	}
 	
+	/**
+	 * this method gets a specific company by name
+	 */
 	@Override
 	public Company getCompany(String name) throws CouponSystemException {
 		Connection con = null;
@@ -138,6 +157,9 @@ public class CompanyDaoDb implements CompanyDao {
 		return company;
 	}
 
+	/**
+	 * this method gets all companies
+	 */
 	@Override
 	public Collection<Company> getAllCompanies() throws CouponSystemException {
 		Connection con = null;
@@ -203,6 +225,9 @@ public class CompanyDaoDb implements CompanyDao {
 		return coupons;
 	}
 
+	/**
+	 * this method uses to login for company client
+	 */
 	@Override
 	public boolean login(String name, String password) throws CouponSystemException {
 		Connection con = null;
@@ -226,6 +251,9 @@ public class CompanyDaoDb implements CompanyDao {
 		}
 	}
 
+	/**
+	 * this method checks if specific company exist in db
+	 */
 	@Override
 	public boolean checkIfExist(Company company) throws CouponSystemException {
 		Connection con = null;
@@ -248,6 +276,9 @@ public class CompanyDaoDb implements CompanyDao {
 		}
 	}
 
+	/**
+	 * this method remove the coupon from company-coupon table
+	 */
 	@Override
 	public void removeCompanyCoupon(Company company) throws CouponSystemException {
 		Connection con = null;
@@ -266,6 +297,9 @@ public class CompanyDaoDb implements CompanyDao {
 
 	}
 
+	/**
+	 * this method insert coupon to company-coupon table when coupon created 
+	 */
 	@Override
 	public void insertCouponCreation(long companyId, long couponId) throws CouponSystemException {
 		Connection con = null;
@@ -285,6 +319,9 @@ public class CompanyDaoDb implements CompanyDao {
 
 	}
 
+	/**
+	 * this method checks if a coupon belong to specific company
+	 */
 	@Override
 	public boolean couponBelongComapny(long companyId, long couponId) throws CouponSystemException {
 		Connection con = null;
@@ -307,6 +344,9 @@ public class CompanyDaoDb implements CompanyDao {
 		}
 	}
 	
+	/**
+	 * this method gets the coupon by type and company
+	 */
 	@Override
 	public Collection<Coupon> getCouponByType(Company company, CouponType type) throws CouponSystemException {
 		Connection con=null;

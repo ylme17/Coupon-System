@@ -14,6 +14,11 @@ import coupon.sys.core.facade.CompanyFacade;
 import coupon.sys.core.facade.CustomerFacade;
 import coupon.sys.core.thread.DailyCouponExpirationTask;
 
+/**
+ * this is the operating class - singleton
+ * @author YECHIEL
+ *
+ */
 public class CouponSystem {
 
 	private CouponDao couponDao;
@@ -23,6 +28,9 @@ public class CouponSystem {
 	private ClientFacade clientFacade;
 	private ConnectionPool connectionPool;
 
+	/**
+	 * instance of this class
+	 */
 	public static CouponSystem instance;
 
 	private CouponSystem() throws CouponSystemException{
@@ -35,10 +43,15 @@ public class CouponSystem {
 			Thread dailyCouponExpirationTaskThread = new Thread(dailyCouponExpirationTask, "daily expiration deleting task");
 			dailyCouponExpirationTaskThread.start();
 		} catch (Exception e) {
-			throw new CouponSystemException("cant get a connection ot activate daily task");
+			throw new CouponSystemException("cant get a connection to activate daily task");
 		}
 	}
 
+	/**
+	 * get instance method
+	 * @return instance
+	 * @throws CouponSystemException
+	 */
 	public static CouponSystem getInstance() throws CouponSystemException {
 		if (instance == null) {
 			instance = new CouponSystem();
@@ -46,6 +59,14 @@ public class CouponSystem {
 		return instance;
 	}
 
+	/**
+	 * login method for clients
+	 * @param name name of client
+	 * @param password password of client
+	 * @param clientType type of the client
+	 * @return relevant facade
+	 * @throws CouponSystemException
+	 */
 	public ClientFacade login(String name, String password, Enum<ClientType> clientType) throws CouponSystemException{
 		try {
 			if(ClientType.ADMIN.equals(clientType) && name.equals("admin") && password.equals("1234")) {
@@ -63,6 +84,10 @@ public class CouponSystem {
 		return clientFacade;
 	}
 
+	/**
+	 * this method shuts down the system
+	 * @throws CouponSystemException
+	 */
 	public void shutDown() throws CouponSystemException {
 		this.dailyCouponExpirationTask.stopTask();
 		this.connectionPool.closeAllConnections();
