@@ -10,5 +10,9 @@ public class ObjectDontExistException extends CouponSystemException {
 	public ObjectDontExistException() {
 		super("object dont exist in db");
 	}
+	
+	public ObjectDontExistException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
 }

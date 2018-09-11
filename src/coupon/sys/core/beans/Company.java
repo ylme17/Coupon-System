@@ -48,6 +48,15 @@ public class Company {
 	}
 
 	/**
+	 * construct company object and gets only id
+	 * 
+	 * @param id company id
+	 */
+	public Company(long id) {
+		setId(id);
+	}
+
+	/**
 	 * get id method
 	 * 
 	 * @return the id of current company
@@ -58,6 +67,7 @@ public class Company {
 
 	/**
 	 * set id method
+	 * 
 	 * @param id
 	 */
 	public void setId(long id) {
@@ -103,7 +113,7 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + "]";
+		return "Company [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + "] \n";
 	}
 
 }

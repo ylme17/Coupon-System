@@ -3,7 +3,7 @@ package coupon.sys.core.beans;
 import java.util.Date;
 
 public class Coupon {
-	
+
 	private long id;
 	private String title;
 	private Date startDate;
@@ -13,22 +13,32 @@ public class Coupon {
 	private String message;
 	private double price;
 	private String image;
-	
+
 	public Coupon() {
 	}
-	
-	public Coupon(long id, String title, Date startDate, Date endDate, int amount, 
-			CouponType type, String message, double price, String image) {
+
+	public Coupon(long id) {
 		super();
-		this.id=id;
-		this.title=title;
-		this.startDate=startDate;
-		this.endDate=endDate;
-		this.amount=amount;
-		this.type=type;
-		this.message=message;
-		this.price=price;
-		this.image=image;
+		this.id = id;
+	}
+	
+	public Coupon(String title) {
+		super();
+		this.title = title;
+	}
+
+	public Coupon(long id, String title, Date startDate, Date endDate, int amount, CouponType type, String message,
+			double price, String image) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.amount = amount;
+		this.type = type;
+		this.message = message;
+		this.price = price;
+		this.image = image;
 	}
 
 	public long getId() {
@@ -106,8 +116,8 @@ public class Coupon {
 	@Override
 	public String toString() {
 		return "Coupon [id=" + id + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", amount=" + amount + ", message=" + message + ", price=" + price + ", image=" + image + "]";
+				+ ", amount=" + amount + ", type=" + type + ", message=" + message + ", price=" + price + ", image="
+				+ image + "] \n";
 	}
-	
 
 }

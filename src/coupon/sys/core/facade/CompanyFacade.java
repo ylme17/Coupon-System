@@ -33,6 +33,8 @@ public class CompanyFacade implements ClientFacade {
 	public void removeCoupon(Coupon coupon) throws CouponSystemException {
 		try {
 			if(companyDao.couponBelongComapny(this.company.getId(), coupon.getId())) {
+//				couponDao.removeCustomerCoupon(company);
+//				companyDao.removeCompanyCoupon(company);
 				couponDao.removeCoupon(coupon);
 			}
 		} catch (CouponSystemException e) {

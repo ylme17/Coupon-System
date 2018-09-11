@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import coupon.sys.core.exceptions.CouponSystemException;
+import coupon.sys.core.exceptions.ConnectionPoolException;
 
 public class ConnectionPool {
 	
@@ -17,7 +17,7 @@ public class ConnectionPool {
 	private String url="jdbc:derby://localhost:1527/CouponSysdb";
 	private static ConnectionPool instance;
 	
-	public ConnectionPool() throws CouponSystemException {
+	public ConnectionPool() throws ConnectionPoolException {
 		try {
 			for (int i = 0; i < POOL_SIZE; i++) {
 				Connection con=DriverManager.getConnection(url);
@@ -25,20 +25,23 @@ public class ConnectionPool {
 				connectionsBackup.add(con);
 			}
 		} catch (SQLException e) {
-			throw new CouponSystemException("connection pool initialization error", e);
+			throw new ConnectionPoolException("connection pool initialization error", e);
 		}
 	}
 	
-	public static ConnectionPool getInstance() {
+	public synchronized static ConnectionPool getInstance() throws ConnectionPoolException {
+		if(instance==null) {
+			instance=new ConnectionPool();
+		}
 		return instance;
 	}
 
-	public synchronized Connection getConnection() {
+	public synchronized Connection getConnection() throws ConnectionPoolException {
 		while (connections.isEmpty()) {
 			try {
 				wait();
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (InterruptedException e) {
+				throw new ConnectionPoolException();
 			}
 		}
 		Iterator<Connection> it=connections.iterator();
@@ -52,12 +55,13 @@ public class ConnectionPool {
 		notifyAll();
 	}
 	
-	public synchronized void closeAllConnections() throws CouponSystemException{
+	//change
+	public synchronized void closeAllConnections() throws ConnectionPoolException{
 		for (Connection connection : connections) {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				throw new CouponSystemException("connection pool shutdown error", e);
+				throw new ConnectionPoolException("connection pool shutdown error", e);
 			}
 		}
 	}

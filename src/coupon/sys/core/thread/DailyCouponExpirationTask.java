@@ -1,18 +1,18 @@
 package coupon.sys.core.thread;
 
 import java.util.Collection;
-import java.util.Date;
 
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.dao.CouponDao;
 import coupon.sys.core.dao.db.CouponDaoDb;
-import coupon.sys.core.exceptions.CouponSystemException;
+import coupon.sys.core.exceptions.DbException;
+import coupon.sys.core.util.CurrentDate;
 
 public class DailyCouponExpirationTask implements Runnable {
 
 	private CouponDao couponDaoDb;
 	private boolean quit;
-	private Collection<Coupon> couponToDelete;
+	private Collection<Coupon> expiredCoupons;
 
 	public DailyCouponExpirationTask() {
 		this.quit = false;
@@ -23,16 +23,15 @@ public class DailyCouponExpirationTask implements Runnable {
 		try {
 			couponDaoDb = new CouponDaoDb();
 			if (!this.quit) {
-				Date date = new Date();
-				this.couponToDelete = couponDaoDb.getCouponUpToDate(date);
-				if (this.couponToDelete != null) {
-					for (Coupon coupon : couponToDelete) {
+				this.expiredCoupons = couponDaoDb.getCouponUpToDate(CurrentDate.getCurrentDate());
+				if (this.expiredCoupons != null) {
+					for (Coupon coupon : expiredCoupons) {
 						this.couponDaoDb.removeCoupon(coupon);
 					}
 				}
 			}
-		} catch (CouponSystemException e) {
-			System.out.println(e.getMessage() + ", failed to remove old coupons");
+		} catch (DbException e) {
+			System.out.println(e + ", failed to remove expired coupons");
 		}
 	}
 

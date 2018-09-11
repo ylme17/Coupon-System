@@ -16,6 +16,16 @@ public class Customer {
 		this.password=password;
 	}
 	
+	public Customer(long id) {
+		super();
+		this.id=id;
+	}
+	
+	public Customer(String name) {
+		super();
+		this.name=name;
+	}
+	
 	public Customer() {
 	}
 
@@ -53,7 +63,7 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", password=" + password + "]";
+		return "Customer [id=" + id + ", name=" + name + ", password=" + password + "] \n";
 	}
 
 	

@@ -5,35 +5,79 @@ import java.util.Collection;
 import coupon.sys.core.beans.Company;
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
-import coupon.sys.core.exceptions.CouponSystemException;
+import coupon.sys.core.exceptions.DbException;
 
+/**
+ * this is interface for all company methods
+ * @author YECHIEL.MOSHE
+ *
+ */
 public interface CompanyDao {
 	
-	public void createCompany(Company company) throws CouponSystemException;
+	/**
+	 * this method create a company
+	 */
+	public void createCompany(Company company) throws DbException;
 	
-	public void removeCompany(Company company) throws CouponSystemException;
+	/**
+	 * this method remove the company
+	 */
+	public void removeCompany(Company company) throws DbException;
 	
-	public void updateCompany(Company company) throws CouponSystemException;
+	/**
+	 * this method update the company
+	 */
+	public void updateCompany(Company company) throws DbException;
 	
-	public Company getCompany(long id) throws CouponSystemException;
-		
-	public Collection<Company> getAllCompanies() throws CouponSystemException;
+	/**
+	 * this method get specific company by id
+	 */
+	public Company getCompany(long id) throws DbException;
+	
+	/**
+	 * this method get all companies
+	 */
+	public Collection<Company> getAllCompanies() throws DbException;
 
-	public Collection<Coupon> getCoupons(Company company) throws CouponSystemException;
+	/**
+	 * this method get all coupons by company
+	 */
+	public Collection<Coupon> getCoupons(Company company) throws DbException;
 	
-	public boolean login(String name, String password) throws CouponSystemException;
+	/**
+	 * this method use to login for company client
+	 */
+	public boolean login(String name, String password) throws DbException;
 	
-	public boolean checkIfExist(Company company) throws CouponSystemException;
+	/**
+	 * this method check if specific company exist in db by name
+	 */
+	public boolean checkIfExist(Company company) throws DbException;
 	
-	public void removeCompanyCoupon(Company company) throws CouponSystemException;
+	/**
+	 * this method remove the coupon from company-coupon table
+	 */
+	public void removeCompanyCoupon(Company company) throws DbException;
 	
-	public void insertCouponCreation(long companyId, long couponId) throws CouponSystemException;
+	/**
+	 * this method insert coupon to company-coupon table when coupon created
+	 */
+	public void insertCouponCreation(long companyId, long couponId) throws DbException;
 	
-	public boolean couponBelongComapny(long companyId, long couponId) throws CouponSystemException;
+	/**
+	 * this method check if coupon belong to specific company
+	 */
+	public boolean couponBelongComapny(long companyId, long couponId) throws DbException;
 	
-	public Collection<Coupon> getCouponByType(Company company, CouponType type) throws CouponSystemException;
+	/**
+	 * this method get the coupon by type and company
+	 */
+	public Collection<Coupon> getCouponByType(Company company, CouponType type) throws DbException;
 	
-	public Company getCompany(String name) throws CouponSystemException;
+	/**
+	 * this method get specific company by name
+	 */
+	public Company getCompany(String name) throws DbException;
 
 	
 }

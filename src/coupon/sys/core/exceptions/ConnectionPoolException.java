@@ -8,7 +8,11 @@ public class ConnectionPoolException extends CouponSystemException {
 	private static final long serialVersionUID = 1L;
 	
 	public ConnectionPoolException() {
-		super("unable to get a connection from the connection pool");
+		super("cannot get connection");
+	}
+	
+	public ConnectionPoolException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

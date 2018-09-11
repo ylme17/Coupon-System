@@ -8,6 +8,8 @@ import coupon.sys.core.dao.db.CompanyDaoDb;
 import coupon.sys.core.dao.db.CouponDaoDb;
 import coupon.sys.core.dao.db.CustomerDaoDb;
 import coupon.sys.core.exceptions.CouponSystemException;
+import coupon.sys.core.exceptions.LoginException;
+import coupon.sys.core.exceptions.ObjectDontExistException;
 import coupon.sys.core.facade.AdminFacade;
 import coupon.sys.core.facade.ClientFacade;
 import coupon.sys.core.facade.CompanyFacade;
@@ -63,23 +65,22 @@ public class CouponSystem {
 	 * login method for clients
 	 * @param name name of client
 	 * @param password password of client
-	 * @param clientType type of the client
 	 * @return relevant facade
 	 * @throws CouponSystemException
 	 */
-	public ClientFacade login(String name, String password, Enum<ClientType> clientType) throws CouponSystemException{
+	public ClientFacade login(String name, String password) throws CouponSystemException{
 		try {
-			if(ClientType.ADMIN.equals(clientType) && name.equals("admin") && password.equals("1234")) {
+			if(name.equals("admin") && password.equals("1234")) {
 				clientFacade=new AdminFacade(this.companyDao, this.customerDao);
-			}else if(ClientType.COMPANY.equals(clientType)&&companyDao.login(name, password)) {
+			}else if(companyDao.login(name, password)) {
 				clientFacade=new CompanyFacade(couponDao, companyDao, companyDao.getCompany(name));
-			}else if(ClientType.CUSTOMER.equals(clientType)&&customerDao.login(name, password)) {
+			}else if(customerDao.login(name, password)) {
 				clientFacade=new CustomerFacade(customerDao, couponDao, customerDao.getCustomer(name));
 			}else {
-				throw new CouponSystemException("wrong user name or password, please try again");
+				throw new LoginException();
 			}
-		} catch (CouponSystemException e) {
-			throw new CouponSystemException("wrong user name or password, please try again" ,e);
+		} catch (LoginException | ObjectDontExistException e) {
+			System.out.println(e);
 		}
 		return clientFacade;
 	}

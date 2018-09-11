@@ -6,29 +6,66 @@ import java.util.Date;
 import coupon.sys.core.beans.Company;
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
-import coupon.sys.core.exceptions.CouponSystemException;
+import coupon.sys.core.exceptions.DbException;
 
+/**
+ * this is interface for all coupon methods
+ * @author YECHIEL.MOSHE
+ *
+ */
 public interface CouponDao {
 	
-	public void createCoupon(Coupon coupon) throws CouponSystemException;
+	/**
+	 * this method create coupon
+	 */
+	public void createCoupon(Coupon coupon) throws DbException;
 	
-	public void removeCoupon(Coupon coupon) throws CouponSystemException;
+	/**
+	 * this method remove coupon by id from coupon table and inner-join tables first
+	 * customer-coupon table, second company-coupon table and finally coupon table
+	 */
+	public void removeCoupon(Coupon coupon) throws DbException;
 	
-	public void updateCoupon(Coupon coupon) throws CouponSystemException;
+	/**
+	 * this method update the coupon
+	 */
+	public void updateCoupon(Coupon coupon) throws DbException;
 	
-	public Coupon getCoupon(long id) throws CouponSystemException;
+	/**
+	 * this method get coupon by id
+	 */
+	public Coupon getCoupon(long id) throws DbException;
 	
-	public Collection<Coupon> getAllCoupon() throws CouponSystemException;
+	/**
+	 * this method get all coupons
+	 */
+	public Collection<Coupon> getAllCoupon() throws DbException;
 	
-	public Collection<Coupon> getCouponByType(CouponType type) throws CouponSystemException;
+	/**
+	 * this method get coupons by type
+	 */
+	public Collection<Coupon> getCouponByType(CouponType type) throws DbException;
 	
-	public void removeCouponByCompany(Company company) throws CouponSystemException;
+	/**
+	 * this method remove coupons by company id, this method help to delete company
+	 */
+	public void removeCouponByCompany(Company company) throws DbException;
 
-	public void removeCustomerCoupon(Company company) throws CouponSystemException;
+	/**
+	 * this method remove coupons from customer-coupon table by company id this
+	 * method help to delete company
+	 */
+	public void removeCustomerCoupon(Company company) throws DbException;
 	
-	public boolean checkIfExist(Coupon coupon) throws CouponSystemException;
+	/**
+	 * this method check if coupon exist by title to create one
+	 */
+	public boolean checkIfExist(Coupon coupon) throws DbException;
 	
-	public Collection<Coupon> getCouponUpToDate(Date date) throws CouponSystemException;
+	/**
+	 * this method get coupons by date inside collection
+	 */
+	public Collection<Coupon> getCouponByDate(Date date) throws DbException;
 
 	
 }
