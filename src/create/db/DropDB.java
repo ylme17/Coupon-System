@@ -5,6 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * this class should drop db -not working yet
+ * @author YECHIEL.MOSHE
+ *
+ */
 public class DropDB {
 
 	public static void main(String[] args) {

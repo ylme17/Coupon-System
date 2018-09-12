@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * this class for create company object
  * 
- * @author YECHIEL
+ * @author YECHIEL.MOSHE
  *
  */
 public class Company {
@@ -17,12 +17,12 @@ public class Company {
 	private Collection<Coupon> coupons;
 
 	/**
-	 * construct company object and gets id, name, password and email
+	 * construct company object and get id, name, password and email
 	 * 
-	 * @param id       id of the company - its generated automatically from DB
-	 * @param name     name of the company
-	 * @param password password of the company for client login
-	 * @param email    email of the company
+	 * @param id       id of company - generated automatically from DB
+	 * @param name     name of company
+	 * @param password password of company for client login
+	 * @param email    email of company
 	 */
 	public Company(long id, String name, String password, String email) {
 		super();
@@ -33,13 +33,13 @@ public class Company {
 	}
 
 	/**
-	 * an empty constructor to construct company object
+	 * empty constructor
 	 */
 	public Company() {
 	}
 
 	/**
-	 * construct company object and gets only name
+	 * construct company object and get only name
 	 * 
 	 * @param name name of the company
 	 */
@@ -48,7 +48,7 @@ public class Company {
 	}
 
 	/**
-	 * construct company object and gets only id
+	 * construct company object and get only id
 	 * 
 	 * @param id company id
 	 */
@@ -59,7 +59,7 @@ public class Company {
 	/**
 	 * get id method
 	 * 
-	 * @return the id of current company
+	 * @return id
 	 */
 	public long getId() {
 		return id;
@@ -77,40 +77,71 @@ public class Company {
 	/**
 	 * get name method
 	 * 
-	 * @return the name of current company
+	 * @return name
 	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * set name method
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * get password method
+	 * @return password
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * set password method
+	 * @param password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * get email method
+	 * @return email
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * set email method
+	 * @param email
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+	 * get coupons for company in collection
+	 * @return all coupons
+	 */
 	public Collection<Coupon> getCoupons() {
 		return coupons;
 	}
 
+	/**
+	 * set coupons for company in collection
+	 * @param coupons
+	 */
 	public void setCoupons(Collection<Coupon> coupons) {
 		this.coupons = coupons;
 	}
 
+	/**
+	 * to string method
+	 */
 	@Override
 	public String toString() {
 		return "Company [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + "] \n";

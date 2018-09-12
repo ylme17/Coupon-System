@@ -23,7 +23,7 @@ public class DailyCouponExpirationTask implements Runnable {
 		try {
 			couponDaoDb = new CouponDaoDb();
 			if (!this.quit) {
-				this.expiredCoupons = couponDaoDb.getCouponUpToDate(CurrentDate.getCurrentDate());
+				this.expiredCoupons = couponDaoDb.getCouponByDate(CurrentDate.getCurrentDate());
 				if (this.expiredCoupons != null) {
 					for (Coupon coupon : expiredCoupons) {
 						this.couponDaoDb.removeCoupon(coupon);

@@ -5,6 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * this class create tables
+ * @author YECHIEL.MOSHE
+ *
+ */
 public class CreateTable {
 	public static void main(String[] args) {
 		

@@ -16,7 +16,6 @@ import coupon.sys.core.connectionPool.ConnectionPool;
 import coupon.sys.core.dao.CouponDao;
 import coupon.sys.core.exceptions.ConnectionPoolException;
 import coupon.sys.core.exceptions.DbException;
-import coupon.sys.core.util.CurrentDate;
 
 /**
  * this class implements CouponDao interface
@@ -348,7 +347,7 @@ public class CouponDaoDb implements CouponDao {
 		try {
 			connectionpool = ConnectionPool.getInstance();
 			con = connectionpool.getConnection();
-			String couponByDateSql = "SELECT * FROM coupon WHERE end_date<='" + CurrentDate.getCurrentDate() + "'";
+			String couponByDateSql = "SELECT * FROM coupon WHERE end_date<='" + new java.sql.Date(date.getTime()) + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(couponByDateSql);
 			CouponByDate = new HashSet<>();

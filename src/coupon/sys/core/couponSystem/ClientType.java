@@ -2,7 +2,7 @@ package coupon.sys.core.couponSystem;
 
 /**
  * this enum  defined three types of client
- * @author YECHIEL
+ * @author YECHIEL.MOSHE
  *
  */
 public enum ClientType {

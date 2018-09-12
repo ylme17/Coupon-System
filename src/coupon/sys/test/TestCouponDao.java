@@ -1,18 +1,16 @@
 package coupon.sys.test;
 
-import coupon.sys.core.beans.Company;
-import coupon.sys.core.beans.Coupon;
-import coupon.sys.core.beans.CouponType;
 import coupon.sys.core.dao.CouponDao;
 import coupon.sys.core.dao.db.CouponDaoDb;
 import coupon.sys.core.exceptions.CouponSystemException;
-import coupon.sys.core.util.CurrentDate;
+import coupon.sys.core.thread.DailyCouponExpirationTask;
 
 public class TestCouponDao {
 
 	public static void main(String[] args) throws CouponSystemException {
 		
 		CouponDao cou1=new CouponDaoDb();
+		DailyCouponExpirationTask task=new DailyCouponExpirationTask();
 		
 		//create
 //		cou1.createCoupon(new Coupon(1, "very good coupon", CurrentDate.getCurrTime(), CurrentDate.getCurrTime(), 10, CouponType.FOOD, "buy food", 50, "xy"));
@@ -27,6 +25,7 @@ public class TestCouponDao {
 //		cou1.createCoupon(new Coupon(12, "dishwasher", CurrentDate.getCurrTime(), CurrentDate.getCurrTime(), 20, CouponType.ELECTRICITY, "stop do dishes", 1000, "png"));
 //		cou1.createCoupon(new Coupon(13, "bands", CurrentDate.getCurrentDate(), CurrentDate.getDateInWeek(), 100, CouponType.HEALTH, "first aid", 20, "png"));
 //		cou1.createCoupon(new Coupon(14, "bat", CurrentDate.getCurrentDate(), CurrentDate.getDateInWeek(), 50, CouponType.SPORTS, "baseball", 150, "png"));
+//		cou1.createCoupon(new Coupon(15, "vacation", CurrentDate.getCurrentDate(), new GregorianCalendar(2018, Calendar.SEPTEMBER, 18).getTime(), 20, CouponType.TRAVELLING, "go travel", 2000, "png"));
 		
 		//remove
 //		cou1.removeCoupon(new Coupon(4));
@@ -50,7 +49,11 @@ public class TestCouponDao {
 //		cou1.removeCouponByCompany(new Company(2));
 		
 		//get by date
-		cou1.getCouponByDate(CurrentDate.getCurrentDate());
+//		cou1.getCouponByDate(new GregorianCalendar(2018, Calendar.SEPTEMBER, 8).getTime());
+//		cou1.getCouponByDate(CurrentDate.getCurrentDate());
+		
+		//thread
+		task.run();
 
 	}
 
