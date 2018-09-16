@@ -1,4 +1,4 @@
-package coupon.sys.core.connectionPool;
+package coupon.sys.core.connections;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

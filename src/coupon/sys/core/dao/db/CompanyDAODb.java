@@ -14,7 +14,7 @@ import coupon.sys.core.beans.Company;
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
 import coupon.sys.core.beans.Customer;
-import coupon.sys.core.connectionPool.ConnectionPool;
+import coupon.sys.core.connections.ConnectionPool;
 import coupon.sys.core.dao.CompanyDAO;
 import coupon.sys.core.exceptions.ConnectionPoolException;
 import coupon.sys.core.exceptions.DbException;

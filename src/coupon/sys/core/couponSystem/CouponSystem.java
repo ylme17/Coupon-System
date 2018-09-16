@@ -1,6 +1,6 @@
 package coupon.sys.core.couponSystem;
 
-import coupon.sys.core.connectionPool.ConnectionPool;
+import coupon.sys.core.connections.ConnectionPool;
 import coupon.sys.core.dailyTask.DailyCouponExpirationTask;
 import coupon.sys.core.dao.CompanyDAO;
 import coupon.sys.core.dao.CouponDAO;
