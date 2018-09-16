@@ -3,7 +3,7 @@ package coupon.sys.core.beans;
 import java.util.Collection;
 
 /**
- * this class for create company object
+ * this class for create objects from company type
  * 
  * @author YECHIEL.MOSHE
  *

@@ -13,19 +13,19 @@ import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
 import coupon.sys.core.beans.Customer;
 import coupon.sys.core.connectionPool.ConnectionPool;
-import coupon.sys.core.dao.CustomerDao;
+import coupon.sys.core.dao.CustomerDAO;
 import coupon.sys.core.exceptions.ConnectionPoolException;
 import coupon.sys.core.exceptions.DbException;
 
 /**
- * this class implements CutomerDao interface
+ * this class implements CutomerDAO interface
  * 
  * @author YECHIEL.MOSHE
  * 
  */
-public class CustomerDaoDb implements CustomerDao {
+public class CustomerDAODb implements CustomerDAO {
 
-	private ConnectionPool connectionpool;
+	private ConnectionPool connectionPool;
 
 	/**
 	 * this method create customer
@@ -34,8 +34,8 @@ public class CustomerDaoDb implements CustomerDao {
 	public void createCustomer(Customer customer) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String createCustomerSql = "INSERT INTO customer (customer_name, password) VALUES(?,?)";
 			PreparedStatement pst = con.prepareStatement(createCustomerSql, PreparedStatement.RETURN_GENERATED_KEYS);
 			pst.setString(1, customer.getName());
@@ -53,7 +53,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException("cannot create new customer[name: " + customer.getName() + "]");
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -65,8 +65,8 @@ public class CustomerDaoDb implements CustomerDao {
 	public void removeCustomer(Customer customer) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String removeCustomerSql = "DELETE FROM customer WHERE id=" + customer.getId();
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCustomerSql);
@@ -77,7 +77,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException("cannot delete customer[id: " + customer.getId() + "]");
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -89,8 +89,8 @@ public class CustomerDaoDb implements CustomerDao {
 	public void updateCustomer(Customer customer) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String updateCustomerSql = "UPDATE customer SET customer_name='" + customer.getName() + "', password='"
 					+ customer.getPassword() + "' WHERE id= " + customer.getId();
 			Statement st = con.createStatement();
@@ -103,7 +103,7 @@ public class CustomerDaoDb implements CustomerDao {
 					"cannot update customer[id: " + customer.getId() + ", name: " + customer.getName() + "]");
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -116,8 +116,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		Customer customer = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String getCustomerSql = "SELECT * FROM customer WHERE id=" + id;
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getCustomerSql);
@@ -134,7 +134,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException("cannot get customer[id: " + customer.getId() + "]");
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return customer;
 	}
@@ -147,8 +147,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		Customer customer = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String getCustomerSql = "SELECT * FROM customer WHERE customer_name='" + name + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getCustomerSql);
@@ -165,7 +165,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException("cannot get customer[name: " + customer.getName() + "]");
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return customer;
 	}
@@ -178,8 +178,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		ArrayList<Customer> customers = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String getAllCustomersSql = "SELECT * FROM customer";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getAllCustomersSql);
@@ -199,7 +199,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return customers;
 	}
@@ -212,8 +212,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		ArrayList<Coupon> coupons = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			coupons = new ArrayList<Coupon>();
 			String getCouponsSql = "SELECT * FROM coupon INNER JOIN customer_coupon ON id=customer_coupon.coupon_id "
 					+ "WHERE customer_coupon.customer_id=" + customer.getId();
@@ -240,7 +240,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException("cannot get coupons");
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return coupons;
 	}
@@ -253,8 +253,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		boolean loginSuccess = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String loginSql = "SELECT customer_name, password FROM customer WHERE customer_name='" + name + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(loginSql);
@@ -271,7 +271,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return loginSuccess;
 	}
@@ -285,8 +285,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		boolean purchased = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String alreadyPurchasedSql = "SELECT coupon_id FROM customer_coupon WHERE customer_id=" + customerId
 					+ "AND coupon_id=" + couponId;
 			Statement st = con.createStatement();
@@ -302,7 +302,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return purchased;
 	}
@@ -314,8 +314,8 @@ public class CustomerDaoDb implements CustomerDao {
 	public void insertCouponPurchase(long customerId, long couponId) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String insertCouponSql = "INSERT INTO customer_coupon (customer_id, coupon_id) VALUES(" + customerId + ", "
 					+ couponId + ")";
 			Statement st = con.createStatement();
@@ -327,7 +327,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -340,8 +340,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		Collection<Coupon> couponByType = new ArrayList<>();
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String couponByTypeSql = "SELECT co.* FROM customer_coupon cc, coupon co WHERE cc.coupon_id=co.id "
 					+ "AND cc.customer_id=" + customer.getId() + " AND co.type='" + type.name() + "'";
 			Statement st = con.createStatement();
@@ -367,7 +367,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return couponByType;
 	}
@@ -380,8 +380,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		Collection<Coupon> couponByPrice = new ArrayList<>();
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String couponByPriceSql = "SELECT coupon.* FROM customer_coupon, coupon WHERE customer_coupon.coupon_id=coupon.id "
 					+ "AND customer_coupon.customer_id=" + customer.getId() + " AND coupon.price<=" + Price;
 			Statement st = con.createStatement();
@@ -407,7 +407,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return couponByPrice;
 	}
@@ -420,8 +420,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		boolean exist = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String checkSql = "SELECT customer_name FROM customer WHERE customer_name='" + customer.getName() + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(checkSql);
@@ -436,7 +436,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return exist;
 	}
@@ -449,8 +449,8 @@ public class CustomerDaoDb implements CustomerDao {
 		Connection con = null;
 		boolean exist = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String checkSql = "SELECT customer_name FROM customer WHERE customer_name='" + company.getName() + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(checkSql);
@@ -465,7 +465,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return exist;
 	}
@@ -477,8 +477,8 @@ public class CustomerDaoDb implements CustomerDao {
 	public void removeCustomerCoupon(Customer customer) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String removeCustomerCouponSql = "DELETE FROM customer_coupon WHERE customer_id=" + customer.getId();
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCustomerCouponSql);
@@ -489,7 +489,7 @@ public class CustomerDaoDb implements CustomerDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}

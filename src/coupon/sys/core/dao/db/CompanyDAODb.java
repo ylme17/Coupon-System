@@ -15,19 +15,19 @@ import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
 import coupon.sys.core.beans.Customer;
 import coupon.sys.core.connectionPool.ConnectionPool;
-import coupon.sys.core.dao.CompanyDao;
+import coupon.sys.core.dao.CompanyDAO;
 import coupon.sys.core.exceptions.ConnectionPoolException;
 import coupon.sys.core.exceptions.DbException;
 
 /**
- * this class implements CompanyDao interface
+ * this class implements CompanyDAO interface
  * 
  * @author YECHIEL.MOSHE
  * 
  */
-public class CompanyDaoDb implements CompanyDao {
+public class CompanyDAODb implements CompanyDAO {
 
-	private ConnectionPool connectionpool;
+	private ConnectionPool connectionPool;
 
 	/**
 	 * this method create a company
@@ -36,8 +36,8 @@ public class CompanyDaoDb implements CompanyDao {
 	public void createCompany(Company company) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String createCompanySql = "INSERT INTO company (company_name, password, email) VALUES(?,?,?)";
 			PreparedStatement pst = con.prepareStatement(createCompanySql, PreparedStatement.RETURN_GENERATED_KEYS);
 			pst.setString(1, company.getName());
@@ -56,7 +56,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException("cannot create new company[name: " + company.getName() + "]");
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -68,8 +68,8 @@ public class CompanyDaoDb implements CompanyDao {
 	public void removeCompany(Company company) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String removeCompanySql = "DELETE FROM company WHERE id=" + company.getId();
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCompanySql);
@@ -80,7 +80,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException("cannot delete company " + company.toString());
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -92,8 +92,8 @@ public class CompanyDaoDb implements CompanyDao {
 	public void updateCompany(Company company) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String updateCompanySql = "UPDATE company SET company_name='" + company.getName() + "', password='"
 					+ company.getPassword() + "', email='" + company.getEmail() + "' WHERE id= " + company.getId();
 			Statement st = con.createStatement();
@@ -105,7 +105,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException("cannot update company " + company.toString(), e);
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -118,8 +118,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		Company company = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String getCompanySql = "SELECT * FROM company WHERE id=" + id;
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getCompanySql);
@@ -137,7 +137,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return company;
 	}
@@ -150,8 +150,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		Company company = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String getCompanySql = "SELECT * FROM company WHERE company_name='" + name + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getCompanySql);
@@ -169,7 +169,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return company;
 	}
@@ -182,8 +182,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		Collection<Company> companies = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String getAllCompaniesSql = "SELECT * FROM company";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getAllCompaniesSql);
@@ -204,7 +204,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return companies;
 	}
@@ -217,8 +217,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		ArrayList<Coupon> coupons = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			coupons = new ArrayList<Coupon>();
 			String getCouponsSql = "SELECT * FROM coupon INNER JOIN company_coupon ON id=company_coupon.coupon_id "
 					+ "WHERE company_coupon.company_id=" + company.getId();
@@ -245,7 +245,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return coupons;
 	}
@@ -258,8 +258,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		boolean loginSuccess = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String loginSql = "SELECT company_name, password FROM company WHERE company_name='" + name + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(loginSql);
@@ -276,7 +276,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return loginSuccess;
 	}
@@ -289,8 +289,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		boolean exist = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String checkSql = "SELECT * FROM company WHERE company_name='" + company.getName() + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(checkSql);
@@ -305,7 +305,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return exist;
 	}
@@ -318,8 +318,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		boolean exist = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String checkSql = "SELECT * FROM company WHERE company_name='" + customer.getName() + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(checkSql);
@@ -334,7 +334,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return exist;
 	}
@@ -346,8 +346,8 @@ public class CompanyDaoDb implements CompanyDao {
 	public void removeCompanyCoupon(Company company) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String removeCompanySql = "DELETE FROM company_coupon WHERE company_id=" + company.getId();
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCompanySql);
@@ -358,7 +358,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException("unable to delete from company-coupon company id: " + company.getId());
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -370,8 +370,8 @@ public class CompanyDaoDb implements CompanyDao {
 	public void insertCouponCreation(long companyId, long couponId) throws DbException {
 		Connection con = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String insertCouponSql = "INSERT INTO company_coupon (company_id, coupon_id) VALUES(" + companyId + ", "
 					+ couponId + ")";
 			Statement st = con.createStatement();
@@ -383,7 +383,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 
 	}
@@ -396,8 +396,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		boolean belong = false;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String couponBelongsSql = "SELECT * FROM company_coupon WHERE company_id=" + companyId + " AND coupon_id="
 					+ couponId;
 			Statement st = con.createStatement();
@@ -413,7 +413,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return belong;
 	}
@@ -426,8 +426,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		ArrayList<Coupon> coupons = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String getCouponsByTypeSql = "SELECT coupon.* FROM coupon, company_coupon WHERE company_coupon.coupon_id=coupon.id "
 					+ "AND company_coupon.company_id=" + company.getId() + " AND coupon.type='" + type.name() + "'";
 			Statement st = con.createStatement();
@@ -454,7 +454,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return coupons;
 	}
@@ -467,8 +467,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		Collection<Coupon> couponByPrice = new ArrayList<>();
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String couponByPriceSql = "SELECT coupon.* FROM coupon, company_coupon WHERE company_coupon.coupon_id=coupon.id "
 					+ "AND company_coupon.company_id=" + company.getId() + " AND coupon.price<=" + Price;
 			Statement st = con.createStatement();
@@ -494,7 +494,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return couponByPrice;
 	}
@@ -507,8 +507,8 @@ public class CompanyDaoDb implements CompanyDao {
 		Connection con = null;
 		Collection<Coupon> CouponsByDate = null;
 		try {
-			connectionpool = ConnectionPool.getInstance();
-			con = connectionpool.getConnection();
+			connectionPool = ConnectionPool.getInstance();
+			con = connectionPool.getConnection();
 			String couponByDateSql = "SELECT coupon.* FROM company_coupon, coupon WHERE company_coupon.coupon_id=coupon.id "
 					+ "AND company_coupon.company_id=" + company.getId() + " AND coupon.start_date<='"
 					+ new java.sql.Date(date.getTime()) + "'";
@@ -536,7 +536,7 @@ public class CompanyDaoDb implements CompanyDao {
 			throw new DbException();
 		} finally {
 			if (con != null)
-				connectionpool.returnConnection(con);
+				connectionPool.returnConnection(con);
 		}
 		return CouponsByDate;
 	}

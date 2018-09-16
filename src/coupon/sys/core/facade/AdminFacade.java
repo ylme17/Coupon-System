@@ -5,9 +5,9 @@ import java.util.Collection;
 
 import coupon.sys.core.beans.Company;
 import coupon.sys.core.beans.Customer;
-import coupon.sys.core.dao.CompanyDao;
-import coupon.sys.core.dao.CouponDao;
-import coupon.sys.core.dao.CustomerDao;
+import coupon.sys.core.dao.CompanyDAO;
+import coupon.sys.core.dao.CouponDAO;
+import coupon.sys.core.dao.CustomerDAO;
 import coupon.sys.core.exceptions.DbException;
 import coupon.sys.core.exceptions.ObjectAlreadyExistException;
 import coupon.sys.core.exceptions.ObjectDontExistException;
@@ -20,21 +20,21 @@ import coupon.sys.core.exceptions.ObjectDontExistException;
  */
 public class AdminFacade implements ClientFacade {
 
-	private CompanyDao companyDao;
-	private CustomerDao customerDao;
-	private CouponDao couponDao;
+	private CompanyDAO companyDAO;
+	private CustomerDAO customerDAO;
+	private CouponDAO couponDAO;
 
 	/**
 	 * construct the Admin facade and get companyDao, customerDao and couponDao
 	 * 
-	 * @param companyDaoDb
-	 * @param customerDaoDb
-	 * @param couponDaoDb
+	 * @param companyDAO
+	 * @param customerDAO
+	 * @param couponDAO
 	 */
-	public AdminFacade(CompanyDao companyDaoDb, CustomerDao customerDaoDb, CouponDao couponDaoDb) {
-		this.companyDao = companyDaoDb;
-		this.customerDao = customerDaoDb;
-		this.couponDao = couponDaoDb;
+	public AdminFacade(CompanyDAO companyDAO, CustomerDAO customerDAO, CouponDAO couponDAO) {
+		this.companyDAO = companyDAO;
+		this.customerDAO = customerDAO;
+		this.couponDAO = couponDAO;
 	}
 
 	/**
@@ -46,8 +46,8 @@ public class AdminFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public void createCompany(Company company) throws ObjectAlreadyExistException, DbException {
-		if (companyDao.checkIfExist(company) == false && customerDao.checkIfExist(company) == false) {
-			companyDao.createCompany(company);
+		if (companyDAO.checkIfExist(company) == false && customerDAO.checkIfExist(company) == false) {
+			companyDAO.createCompany(company);
 			System.out.println("company created, id:" + company.getId() + " name:" + company.getName());
 		} else {
 			throw new ObjectAlreadyExistException(company.getName() + " already exist");
@@ -64,12 +64,12 @@ public class AdminFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public void removeCompany(Company company) throws ObjectDontExistException, DbException {
-		Company companydb = companyDao.getCompany(company.getId());
+		Company companydb = companyDAO.getCompany(company.getId());
 		if (companydb != null) {
-			couponDao.removeCustomerCoupon(companydb);
-			couponDao.removeCouponByCompany(companydb);
-			companyDao.removeCompanyCoupon(companydb);
-			companyDao.removeCompany(companydb);
+			couponDAO.removeCustomerCoupon(companydb);
+			couponDAO.removeCouponByCompany(companydb);
+			companyDAO.removeCompanyCoupon(companydb);
+			companyDAO.removeCompany(companydb);
 			System.out.println("company " + company.getId() + " deleted");
 		} else {
 			throw new ObjectDontExistException();
@@ -84,11 +84,11 @@ public class AdminFacade implements ClientFacade {
 	 * @throws ObjectDontExistException
 	 */
 	public void updateCompany(Company company) throws DbException, ObjectDontExistException {
-		Company companydb = companyDao.getCompany(company.getId());
+		Company companydb = companyDAO.getCompany(company.getId());
 		if (companydb != null) {
 			companydb.setPassword(company.getPassword());
 			companydb.setEmail(company.getEmail());
-			companyDao.updateCompany(companydb);
+			companyDAO.updateCompany(companydb);
 			System.out.println("company " + company.getId() + " updated");
 		} else {
 			throw new ObjectDontExistException();
@@ -104,7 +104,7 @@ public class AdminFacade implements ClientFacade {
 	 */
 	public Collection<Company> getAllCompanies() throws ObjectDontExistException, DbException {
 		Collection<Company> allCompanies = new ArrayList<>();
-		allCompanies = companyDao.getAllCompanies();
+		allCompanies = companyDAO.getAllCompanies();
 		if (!allCompanies.isEmpty()) {
 			System.out.println(allCompanies.toString());
 			return allCompanies;
@@ -122,7 +122,7 @@ public class AdminFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Company getCompany(long id) throws ObjectDontExistException, DbException {
-		Company company = companyDao.getCompany(id);
+		Company company = companyDAO.getCompany(id);
 		if (company != null) {
 			System.out.println(company.toString());
 			return company;
@@ -140,8 +140,8 @@ public class AdminFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public void createCustomer(Customer customer) throws ObjectAlreadyExistException, DbException {
-		if (customerDao.checkIfExist(customer) == false && companyDao.checkIfExist(customer) == false) {
-			customerDao.createCustomer(customer);
+		if (customerDAO.checkIfExist(customer) == false && companyDAO.checkIfExist(customer) == false) {
+			customerDAO.createCustomer(customer);
 			System.out.println("customer created, id:" + customer.getId() + " name:" + customer.getName());
 		} else {
 			throw new ObjectAlreadyExistException(customer.getName() + " already exist");
@@ -156,10 +156,10 @@ public class AdminFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public void removeCustomer(Customer customer) throws ObjectDontExistException, DbException {
-		Customer customerdb = customerDao.getCustomer(customer.getId());
+		Customer customerdb = customerDAO.getCustomer(customer.getId());
 		if (customerdb != null) {
-			customerDao.removeCustomerCoupon(customerdb);
-			customerDao.removeCustomer(customerdb);
+			customerDAO.removeCustomerCoupon(customerdb);
+			customerDAO.removeCustomer(customerdb);
 			System.out.println("customer " + customer.getId() + " deleted");
 		} else {
 			throw new ObjectDontExistException();
@@ -174,10 +174,10 @@ public class AdminFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public void updateCustomer(Customer customer) throws ObjectDontExistException, DbException {
-		Customer customerdb = customerDao.getCustomer(customer.getId());
+		Customer customerdb = customerDAO.getCustomer(customer.getId());
 		if (customerdb != null) {
 			customerdb.setPassword(customer.getPassword());
-			customerDao.updateCustomer(customerdb);
+			customerDAO.updateCustomer(customerdb);
 			System.out.println("customer " + customer.getId() + " updated");
 		} else {
 			throw new ObjectDontExistException();
@@ -193,7 +193,7 @@ public class AdminFacade implements ClientFacade {
 	 */
 	public Collection<Customer> getAllCustomer() throws ObjectDontExistException, DbException {
 		Collection<Customer> allCustomers = new ArrayList<>();
-		allCustomers = customerDao.getAllCustomer();
+		allCustomers = customerDAO.getAllCustomer();
 		if (!allCustomers.isEmpty()) {
 			System.out.println(allCustomers.toString());
 			return allCustomers;
@@ -211,7 +211,7 @@ public class AdminFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Customer getCustomer(long id) throws ObjectDontExistException, DbException {
-		Customer customer = customerDao.getCustomer(id);
+		Customer customer = customerDAO.getCustomer(id);
 		if (customer != null) {
 			System.out.println(customer.toString());
 			return customer;

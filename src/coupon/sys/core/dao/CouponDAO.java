@@ -14,7 +14,7 @@ import coupon.sys.core.exceptions.DbException;
  * @author YECHIEL.MOSHE
  *
  */
-public interface CouponDao {
+public interface CouponDAO {
 
 	/**
 	 * this method create coupon

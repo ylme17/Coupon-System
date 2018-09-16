@@ -6,8 +6,8 @@ import java.util.Date;
 import coupon.sys.core.beans.Company;
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
-import coupon.sys.core.dao.CompanyDao;
-import coupon.sys.core.dao.CouponDao;
+import coupon.sys.core.dao.CompanyDAO;
+import coupon.sys.core.dao.CouponDAO;
 import coupon.sys.core.exceptions.DbException;
 import coupon.sys.core.exceptions.ObjectAlreadyExistException;
 import coupon.sys.core.exceptions.ObjectDontExistException;
@@ -20,20 +20,20 @@ import coupon.sys.core.exceptions.ObjectDontExistException;
  */
 public class CompanyFacade implements ClientFacade {
 
-	private CouponDao couponDao;
-	private CompanyDao companyDao;
+	private CouponDAO couponDAO;
+	private CompanyDAO companyDAO;
 	private Company company;
 
 	/**
 	 * construct the company facade and get company, companyDao and couponDao
 	 * 
-	 * @param couponDao
-	 * @param companyDao
+	 * @param couponDAO
+	 * @param companyDAO
 	 * @param company
 	 */
-	public CompanyFacade(CouponDao couponDao, CompanyDao companyDao, Company company) {
-		this.couponDao = couponDao;
-		this.companyDao = companyDao;
+	public CompanyFacade(CouponDAO couponDAO, CompanyDAO companyDAO, Company company) {
+		this.couponDAO = couponDAO;
+		this.companyDAO = companyDAO;
 		this.company = company;
 	}
 
@@ -46,9 +46,9 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public void createCoupon(Coupon coupon) throws ObjectAlreadyExistException, DbException {
-		if (couponDao.checkIfExist(coupon) == false) {
-			couponDao.createCoupon(coupon);
-			companyDao.insertCouponCreation(company.getId(), coupon.getId());
+		if (couponDAO.checkIfExist(coupon) == false) {
+			couponDAO.createCoupon(coupon);
+			companyDAO.insertCouponCreation(company.getId(), coupon.getId());
 			System.out.println("coupon created [title: " + coupon.getTitle() + ", id: " + coupon.getId() + "]");
 		} else {
 			throw new ObjectAlreadyExistException("coupon '" + coupon.getTitle() + "', is already exist");
@@ -65,10 +65,10 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws ObjectDontExistException
 	 */
 	public void removeCoupon(Coupon coupon) throws ObjectDontExistException, DbException {
-		if (companyDao.couponBelongComapny(company.getId(), coupon.getId())) {
-			couponDao.removeCustomerCoupon(coupon);
-			couponDao.removeCompanyCoupon(coupon);
-			couponDao.removeCoupon(coupon);
+		if (companyDAO.couponBelongComapny(company.getId(), coupon.getId())) {
+			couponDAO.removeCustomerCoupon(coupon);
+			couponDAO.removeCompanyCoupon(coupon);
+			couponDAO.removeCoupon(coupon);
 			System.out.println("coupon " + coupon.getId() + " deleted");
 		} else {
 			throw new ObjectDontExistException("coupon not belong to company " + company.getName());
@@ -83,11 +83,11 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public void updateCoupon(Coupon coupon) throws ObjectDontExistException, DbException {
-		Coupon coupondb = couponDao.getCoupon(coupon.getId());
-		if (companyDao.couponBelongComapny(company.getId(), coupondb.getId())) {
+		Coupon coupondb = couponDAO.getCoupon(coupon.getId());
+		if (companyDAO.couponBelongComapny(company.getId(), coupondb.getId())) {
 			coupondb.setEndDate(coupon.getEndDate());
 			coupondb.setPrice(coupon.getPrice());
-			couponDao.updateCoupon(coupondb);
+			couponDAO.updateCoupon(coupondb);
 			System.out.println("coupon " + coupon.getId() + " updated");
 		} else {
 			throw new ObjectDontExistException(
@@ -104,8 +104,8 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Coupon getCoupon(long id) throws ObjectDontExistException, DbException {
-		Coupon coupon = couponDao.getCoupon(id);
-		if (companyDao.couponBelongComapny(company.getId(), id)) {
+		Coupon coupon = couponDAO.getCoupon(id);
+		if (companyDAO.couponBelongComapny(company.getId(), id)) {
 			System.out.println(coupon.toString());
 			return coupon;
 		} else {
@@ -122,7 +122,7 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getAllCoupon() throws ObjectDontExistException, DbException {
-		Collection<Coupon> allCoupon = companyDao.getCoupons(company);
+		Collection<Coupon> allCoupon = companyDAO.getCoupons(company);
 		if (!allCoupon.isEmpty()) {
 			System.out.println(allCoupon.toString());
 			return allCoupon;
@@ -140,7 +140,7 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getCouponByType(CouponType type) throws ObjectDontExistException, DbException {
-		Collection<Coupon> couponByType = companyDao.getCouponByType(company, type);
+		Collection<Coupon> couponByType = companyDAO.getCouponByType(company, type);
 		if (!couponByType.isEmpty()) {
 			System.out.println(couponByType.toString());
 			return couponByType;
@@ -156,7 +156,7 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Company getCompanyInfo() throws DbException {
-		Company companyInfo = companyDao.getCompany(company.getId());
+		Company companyInfo = companyDAO.getCompany(company.getId());
 		System.out.println(companyInfo);
 		return companyInfo;
 	}
@@ -170,7 +170,7 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getCouponByPrice(double price) throws ObjectDontExistException, DbException {
-		Collection<Coupon> couponByPrice = companyDao.getCouponsByPrice(company, price);
+		Collection<Coupon> couponByPrice = companyDAO.getCouponsByPrice(company, price);
 		if (!couponByPrice.isEmpty()) {
 			System.out.println(couponByPrice.toString());
 			return couponByPrice;
@@ -188,7 +188,7 @@ public class CompanyFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getCouponByStartDate(Date date) throws ObjectDontExistException, DbException {
-		Collection<Coupon> couponByDate = companyDao.getCouponsByStartDate(company, date);
+		Collection<Coupon> couponByDate = companyDAO.getCouponsByStartDate(company, date);
 		if (!couponByDate.isEmpty()) {
 			System.out.println(couponByDate.toString());
 			return couponByDate;

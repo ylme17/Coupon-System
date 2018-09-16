@@ -15,7 +15,7 @@ import coupon.sys.core.exceptions.DbException;
  * @author YECHIEL.MOSHE
  *
  */
-public interface CompanyDao {
+public interface CompanyDAO {
 
 	/**
 	 * this method create a company

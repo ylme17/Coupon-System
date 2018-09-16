@@ -1,4 +1,4 @@
-package coupon.sys.core.util;
+package coupon.sys.core.utils;
 
 import java.util.Calendar;
 import java.util.Date;

@@ -1,12 +1,12 @@
-package coupon.sys.core.thread;
+package coupon.sys.core.dailyTask;
 
 import java.util.Collection;
 
 import coupon.sys.core.beans.Coupon;
-import coupon.sys.core.dao.CouponDao;
-import coupon.sys.core.dao.db.CouponDaoDb;
+import coupon.sys.core.dao.CouponDAO;
+import coupon.sys.core.dao.db.CouponDAODb;
 import coupon.sys.core.exceptions.DbException;
-import coupon.sys.core.util.CurrentDate;
+import coupon.sys.core.utils.CurrentDate;
 
 /**
  * this class for delete expired coupons with daily task
@@ -16,7 +16,7 @@ import coupon.sys.core.util.CurrentDate;
  */
 public class DailyCouponExpirationTask implements Runnable {
 
-	private CouponDao couponDao;
+	private CouponDAO couponDAO;
 	private boolean quit;
 	private Collection<Coupon> expiredCoupons;
 
@@ -35,14 +35,14 @@ public class DailyCouponExpirationTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			couponDao = new CouponDaoDb();
+			couponDAO = new CouponDAODb();
 			if (!quit) {
-				expiredCoupons = couponDao.getCouponByDate(CurrentDate.getCurrentDate());
+				expiredCoupons = couponDAO.getCouponByDate(CurrentDate.getCurrentDate());
 				if (!expiredCoupons.isEmpty()) {
 					for (Coupon coupon : expiredCoupons) {
-						couponDao.removeCustomerCoupon(coupon);
-						couponDao.removeCompanyCoupon(coupon);
-						couponDao.removeCoupon(coupon);
+						couponDAO.removeCustomerCoupon(coupon);
+						couponDAO.removeCompanyCoupon(coupon);
+						couponDAO.removeCoupon(coupon);
 					}
 				}
 			}

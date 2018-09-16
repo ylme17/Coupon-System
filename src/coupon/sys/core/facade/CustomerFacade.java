@@ -5,13 +5,13 @@ import java.util.Collection;
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
 import coupon.sys.core.beans.Customer;
-import coupon.sys.core.dao.CouponDao;
-import coupon.sys.core.dao.CustomerDao;
+import coupon.sys.core.dao.CouponDAO;
+import coupon.sys.core.dao.CustomerDAO;
 import coupon.sys.core.exceptions.CouponSystemException;
 import coupon.sys.core.exceptions.DbException;
 import coupon.sys.core.exceptions.ObjectAlreadyExistException;
 import coupon.sys.core.exceptions.ObjectDontExistException;
-import coupon.sys.core.util.CurrentDate;
+import coupon.sys.core.utils.CurrentDate;
 
 /**
  * this class implements the business logic of customer
@@ -22,19 +22,19 @@ import coupon.sys.core.util.CurrentDate;
 public class CustomerFacade implements ClientFacade {
 
 	private Customer customer;
-	private CustomerDao customerDao;
-	private CouponDao couponDao;
+	private CustomerDAO customerDAO;
+	private CouponDAO couponDAO;
 
 	/**
 	 * construct the customer facade and get customer, customerDao and couponDao
 	 * 
-	 * @param customerDao
-	 * @param couponDao
+	 * @param customerDAO
+	 * @param couponDAO
 	 * @param customer
 	 */
-	public CustomerFacade(CustomerDao customerDao, CouponDao couponDao, Customer customer) {
-		this.customerDao = customerDao;
-		this.couponDao = couponDao;
+	public CustomerFacade(CustomerDAO customerDAO, CouponDAO couponDAO, Customer customer) {
+		this.customerDAO = customerDAO;
+		this.couponDAO = couponDAO;
 		this.customer = customer;
 	}
 
@@ -47,14 +47,14 @@ public class CustomerFacade implements ClientFacade {
 	 * @throws CouponSystemException
 	 */
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
-		Coupon coupondb = couponDao.getCoupon(coupon.getId());
+		Coupon coupondb = couponDAO.getCoupon(coupon.getId());
 		if (coupondb != null) {
-			if (customerDao.alreadyPurchased(customer.getId(), coupondb.getId()) == false) {
+			if (customerDAO.alreadyPurchased(customer.getId(), coupondb.getId()) == false) {
 				if (coupondb.getAmount() >= 1) {
 					if (CurrentDate.getCurrentDate().before(coupondb.getEndDate())) {
-						customerDao.insertCouponPurchase(customer.getId(), coupondb.getId());
+						customerDAO.insertCouponPurchase(customer.getId(), coupondb.getId());
 						coupondb.setAmount(coupondb.getAmount() - 1);
-						couponDao.updateCoupon(coupondb);
+						couponDAO.updateCoupon(coupondb);
 						System.out.println("coupon purchased");
 					} else {
 						throw new CouponSystemException("coupon already expired");
@@ -78,7 +78,7 @@ public class CustomerFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getAllPurchasedCoupons() throws ObjectDontExistException, DbException {
-		Collection<Coupon> purchasedCoupons = customerDao.getCoupons(customer);
+		Collection<Coupon> purchasedCoupons = customerDAO.getCoupons(customer);
 		if (!purchasedCoupons.isEmpty()) {
 			System.out.println(purchasedCoupons.toString());
 			return purchasedCoupons;
@@ -98,7 +98,7 @@ public class CustomerFacade implements ClientFacade {
 	 */
 	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType type)
 			throws ObjectDontExistException, DbException {
-		Collection<Coupon> purchasedCouponByType = customerDao.getCouponsByType(customer, type);
+		Collection<Coupon> purchasedCouponByType = customerDAO.getCouponsByType(customer, type);
 		if (!purchasedCouponByType.isEmpty()) {
 			System.out.println(purchasedCouponByType.toString());
 			return purchasedCouponByType;
@@ -116,7 +116,7 @@ public class CustomerFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(double price) throws ObjectDontExistException, DbException {
-		Collection<Coupon> purchasedCouponByPrice = customerDao.getCouponsByPrice(customer, price);
+		Collection<Coupon> purchasedCouponByPrice = customerDAO.getCouponsByPrice(customer, price);
 		if (!purchasedCouponByPrice.isEmpty()) {
 			System.out.println(purchasedCouponByPrice.toString());
 			return purchasedCouponByPrice;

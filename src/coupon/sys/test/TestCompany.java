@@ -8,7 +8,7 @@ import coupon.sys.core.beans.CouponType;
 import coupon.sys.core.couponSystem.CouponSystem;
 import coupon.sys.core.exceptions.CouponSystemException;
 import coupon.sys.core.facade.CompanyFacade;
-import coupon.sys.core.util.CurrentDate;
+import coupon.sys.core.utils.CurrentDate;
 
 public class TestCompany {
 
