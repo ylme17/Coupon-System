@@ -2,6 +2,7 @@ package coupon.sys.core.beans;
 
 /**
  * this enum defined the types of coupon
+ * 
  * @author YECHIEL.MOSHE
  *
  */

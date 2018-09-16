@@ -4,47 +4,51 @@ import java.util.Collection;
 
 /**
  * this class for create customer object
+ * 
  * @author YECHIEL.MOSHE
  *
  */
 public class Customer {
-	
+
 	private long id;
 	private String name;
 	private String password;
 	private Collection<Coupon> coupons;
-	
+
 	/**
 	 * construct customer object and get id, name and password
-	 * @param id id of customer - generated automatically from DB
-	 * @param name name of customer
+	 * 
+	 * @param id       id of customer - generated automatically from DB
+	 * @param name     name of customer
 	 * @param password password of customer
 	 */
 	public Customer(long id, String name, String password) {
 		super();
-		this.id=id;
-		this.name=name;
-		this.password=password;
+		this.id = id;
+		this.name = name;
+		this.password = password;
 	}
-	
+
 	/**
 	 * construct customer object and get only id
+	 * 
 	 * @param id
 	 */
 	public Customer(long id) {
 		super();
-		this.id=id;
+		this.id = id;
 	}
-	
+
 	/**
 	 * construct customer object and get only name
+	 * 
 	 * @param name
 	 */
 	public Customer(String name) {
 		super();
-		this.name=name;
+		this.name = name;
 	}
-	
+
 	/**
 	 * empty constructor
 	 */
@@ -53,6 +57,7 @@ public class Customer {
 
 	/**
 	 * get id method
+	 * 
 	 * @return id
 	 */
 	public long getId() {
@@ -61,6 +66,7 @@ public class Customer {
 
 	/**
 	 * set id method
+	 * 
 	 * @param id
 	 */
 	public void setId(long id) {
@@ -69,6 +75,7 @@ public class Customer {
 
 	/**
 	 * get name method
+	 * 
 	 * @return name
 	 */
 	public String getName() {
@@ -77,6 +84,7 @@ public class Customer {
 
 	/**
 	 * set name method
+	 * 
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -85,6 +93,7 @@ public class Customer {
 
 	/**
 	 * get password method
+	 * 
 	 * @return password
 	 */
 	public String getPassword() {
@@ -93,6 +102,7 @@ public class Customer {
 
 	/**
 	 * set password method
+	 * 
 	 * @param password
 	 */
 	public void setPassword(String password) {
@@ -101,6 +111,7 @@ public class Customer {
 
 	/**
 	 * get coupons for customer in collection
+	 * 
 	 * @return all coupons
 	 */
 	public Collection<Coupon> getCoupons() {
@@ -109,6 +120,7 @@ public class Customer {
 
 	/**
 	 * set coupons for customer in collection
+	 * 
 	 * @param coupons
 	 */
 	public void setCoupons(Collection<Coupon> coupons) {
@@ -123,5 +135,4 @@ public class Customer {
 		return "Customer [id=" + id + ", name=" + name + ", password=" + password + "] \n";
 	}
 
-	
 }

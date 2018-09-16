@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import coupon.sys.core.beans.Company;
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
 import coupon.sys.core.beans.Customer;
@@ -46,7 +47,6 @@ public class CustomerDaoDb implements CustomerDao {
 			customer.setId(rs.getLong(1));
 			rs.close();
 			pst.close();
-			System.out.println("customer created [name: " + customer.getName() + ", id: " + customer.getId() + "]");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -71,7 +71,6 @@ public class CustomerDaoDb implements CustomerDao {
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCustomerSql);
 			st.close();
-			System.out.println("customer id: " + customer.getId() + " deleted");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -97,7 +96,6 @@ public class CustomerDaoDb implements CustomerDao {
 			Statement st = con.createStatement();
 			st.execute(updateCustomerSql);
 			st.close();
-			System.out.println("customer id: " + customer.getId() + " updated");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -130,7 +128,6 @@ public class CustomerDaoDb implements CustomerDao {
 			customer.setPassword(rs.getString("password"));
 			rs.close();
 			st.close();
-			System.out.println(customer.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -162,7 +159,6 @@ public class CustomerDaoDb implements CustomerDao {
 			customer.setPassword(rs.getString("password"));
 			rs.close();
 			st.close();
-			System.out.println(customer.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -197,7 +193,6 @@ public class CustomerDaoDb implements CustomerDao {
 			}
 			rs.close();
 			st.close();
-			System.out.println(customers.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -239,7 +234,6 @@ public class CustomerDaoDb implements CustomerDao {
 			}
 			rs.close();
 			st.close();
-			System.out.println(coupons.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -264,17 +258,13 @@ public class CustomerDaoDb implements CustomerDao {
 			String loginSql = "SELECT customer_name, password FROM customer WHERE customer_name='" + name + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(loginSql);
-			rs.next();
-			if (rs.getString("password").equals(password)) {
-				loginSuccess = true;
+			if (rs.next()) {
+				if (rs.getString("password").equals(password)) {
+					loginSuccess = true;
+				}
 			}
 			rs.close();
 			st.close();
-			if (loginSuccess) {
-				System.out.println("login success");
-			} else {
-				System.out.println("login failed");
-			}
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -306,11 +296,6 @@ public class CustomerDaoDb implements CustomerDao {
 			}
 			rs.close();
 			st.close();
-			if (purchased) {
-				System.out.println("already purchased");
-			} else {
-				System.out.println("not purchased");
-			}
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -336,7 +321,6 @@ public class CustomerDaoDb implements CustomerDao {
 			Statement st = con.createStatement();
 			st.execute(insertCouponSql);
 			st.close();
-			System.out.println("created in customer-coupon");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -352,14 +336,14 @@ public class CustomerDaoDb implements CustomerDao {
 	 * this method get coupons per customer by type inside collection
 	 */
 	@Override
-	public Collection<Coupon> getCouponByType(Customer customer, CouponType couponType) throws DbException {
+	public Collection<Coupon> getCouponsByType(Customer customer, CouponType type) throws DbException {
 		Connection con = null;
 		Collection<Coupon> couponByType = new ArrayList<>();
 		try {
 			connectionpool = ConnectionPool.getInstance();
 			con = connectionpool.getConnection();
 			String couponByTypeSql = "SELECT co.* FROM customer_coupon cc, coupon co WHERE cc.coupon_id=co.id "
-					+ "AND cc.customer_id=" + customer.getId() + " AND co.type='" + couponType.name() + "'";
+					+ "AND cc.customer_id=" + customer.getId() + " AND co.type='" + type.name() + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(couponByTypeSql);
 			while (rs.next()) {
@@ -377,7 +361,6 @@ public class CustomerDaoDb implements CustomerDao {
 			}
 			rs.close();
 			st.close();
-			System.out.println(couponByType.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -393,16 +376,16 @@ public class CustomerDaoDb implements CustomerDao {
 	 * this method get coupons per customer by price inside collection
 	 */
 	@Override
-	public Collection<Coupon> getCouponUpToPrice(Customer customer, double upToPrice) throws DbException {
+	public Collection<Coupon> getCouponsByPrice(Customer customer, double Price) throws DbException {
 		Connection con = null;
-		Collection<Coupon> couponUpToPrice = new ArrayList<>();
+		Collection<Coupon> couponByPrice = new ArrayList<>();
 		try {
 			connectionpool = ConnectionPool.getInstance();
 			con = connectionpool.getConnection();
-			String couponUpToPriceSql = "SELECT coupon.* FROM customer_coupon, coupon WHERE customer_coupon.coupon_id=coupon.id "
-					+ "AND customer_coupon.customer_id=" + customer.getId() + " AND coupon.price<=" + upToPrice;
+			String couponByPriceSql = "SELECT coupon.* FROM customer_coupon, coupon WHERE customer_coupon.coupon_id=coupon.id "
+					+ "AND customer_coupon.customer_id=" + customer.getId() + " AND coupon.price<=" + Price;
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(couponUpToPriceSql);
+			ResultSet rs = st.executeQuery(couponByPriceSql);
 			while (rs.next()) {
 				Coupon coupon = new Coupon();
 				coupon.setId(rs.getLong("id"));
@@ -414,11 +397,10 @@ public class CustomerDaoDb implements CustomerDao {
 				coupon.setMessage(rs.getString("message"));
 				coupon.setPrice(rs.getDouble("price"));
 				coupon.setImage(rs.getString("image"));
-				couponUpToPrice.add(coupon);
+				couponByPrice.add(coupon);
 			}
 			rs.close();
 			st.close();
-			System.out.println(couponUpToPrice.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -427,7 +409,7 @@ public class CustomerDaoDb implements CustomerDao {
 			if (con != null)
 				connectionpool.returnConnection(con);
 		}
-		return couponUpToPrice;
+		return couponByPrice;
 	}
 
 	/**
@@ -448,11 +430,35 @@ public class CustomerDaoDb implements CustomerDao {
 			}
 			rs.close();
 			st.close();
-			if (exist) {
-				System.out.println("customer already exist");
-			} else {
-				System.out.println("customer not exist");
+		} catch (ConnectionPoolException e) {
+			System.out.println(e);
+		} catch (SQLException e) {
+			throw new DbException();
+		} finally {
+			if (con != null)
+				connectionpool.returnConnection(con);
+		}
+		return exist;
+	}
+
+	/**
+	 * this method check if customer already exist with same name of company in db
+	 */
+	@Override
+	public boolean checkIfExist(Company company) throws DbException {
+		Connection con = null;
+		boolean exist = false;
+		try {
+			connectionpool = ConnectionPool.getInstance();
+			con = connectionpool.getConnection();
+			String checkSql = "SELECT customer_name FROM customer WHERE customer_name='" + company.getName() + "'";
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(checkSql);
+			if (rs.next()) {
+				exist = true;
 			}
+			rs.close();
+			st.close();
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -477,7 +483,6 @@ public class CustomerDaoDb implements CustomerDao {
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCustomerCouponSql);
 			st.close();
-			System.out.println("deleted");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {

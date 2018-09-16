@@ -3,7 +3,8 @@ package coupon.sys.core.beans;
 import java.util.Date;
 
 /**
- *  this class for create coupon object
+ * this class for create coupon object
+ * 
  * @author YECHIEL.MOSHE
  *
  */
@@ -20,16 +21,18 @@ public class Coupon {
 	private String image;
 
 	/**
-	 * construct coupon object and get id, title, start date, end date, amount, type, message, price and image
-	 * @param id id of coupon - generated automatically from DB
-	 * @param title name of coupon
+	 * construct coupon object and get id, title, start date, end date, amount,
+	 * type, message, price and image
+	 * 
+	 * @param id        id of coupon - generated automatically from DB
+	 * @param title     name of coupon
 	 * @param startDate the date the coupon started
-	 * @param endDate the date the coupon expire
-	 * @param amount the amount of coupon
-	 * @param type coupon type
-	 * @param message describe the coupon
-	 * @param price coupon price
-	 * @param image image of the item
+	 * @param endDate   the date the coupon expire
+	 * @param amount    the amount of coupon
+	 * @param type      coupon type
+	 * @param message   describe the coupon
+	 * @param price     coupon price
+	 * @param image     image of the item
 	 */
 	public Coupon(long id, String title, Date startDate, Date endDate, int amount, CouponType type, String message,
 			double price, String image) {
@@ -44,24 +47,26 @@ public class Coupon {
 		this.price = price;
 		this.image = image;
 	}
-	
+
 	/**
 	 * empty constructor
 	 */
 	public Coupon() {
 	}
-	
+
 	/**
 	 * construct coupon object and get only id
+	 * 
 	 * @param id
 	 */
 	public Coupon(long id) {
 		super();
 		this.id = id;
 	}
-	
+
 	/**
 	 * construct coupon object and get only name
+	 * 
 	 * @param title
 	 */
 	public Coupon(String title) {
@@ -70,7 +75,21 @@ public class Coupon {
 	}
 
 	/**
+	 * construct coupon object and get id, end-date and price
+	 * 
+	 * @param endDate
+	 * @param price
+	 */
+	public Coupon(long id, Date endDate, double price) {
+		super();
+		this.id = id;
+		this.endDate = endDate;
+		this.price = price;
+	}
+
+	/**
 	 * get id method
+	 * 
 	 * @return id
 	 */
 	public long getId() {
@@ -79,6 +98,7 @@ public class Coupon {
 
 	/**
 	 * set id method
+	 * 
 	 * @param id
 	 */
 	public void setId(long id) {
@@ -87,6 +107,7 @@ public class Coupon {
 
 	/**
 	 * get title method
+	 * 
 	 * @return title
 	 */
 	public String getTitle() {
@@ -95,6 +116,7 @@ public class Coupon {
 
 	/**
 	 * set title method
+	 * 
 	 * @param title
 	 */
 	public void setTitle(String title) {
@@ -103,6 +125,7 @@ public class Coupon {
 
 	/**
 	 * get startDate method
+	 * 
 	 * @return startDate
 	 */
 	public Date getStartDate() {
@@ -111,6 +134,7 @@ public class Coupon {
 
 	/**
 	 * set startDate method
+	 * 
 	 * @param startDate
 	 */
 	public void setStartDate(Date startDate) {
@@ -119,6 +143,7 @@ public class Coupon {
 
 	/**
 	 * get endDate method
+	 * 
 	 * @return endDate
 	 */
 	public Date getEndDate() {
@@ -127,6 +152,7 @@ public class Coupon {
 
 	/**
 	 * set endDate method
+	 * 
 	 * @param endDate
 	 */
 	public void setEndDate(Date endDate) {
@@ -135,6 +161,7 @@ public class Coupon {
 
 	/**
 	 * get amount method
+	 * 
 	 * @return amount
 	 */
 	public int getAmount() {
@@ -143,6 +170,7 @@ public class Coupon {
 
 	/**
 	 * set amount method
+	 * 
 	 * @param amount
 	 */
 	public void setAmount(int amount) {
@@ -151,6 +179,7 @@ public class Coupon {
 
 	/**
 	 * get type method
+	 * 
 	 * @return type
 	 */
 	public CouponType getType() {
@@ -159,6 +188,7 @@ public class Coupon {
 
 	/**
 	 * set type method
+	 * 
 	 * @param type
 	 */
 	public void setType(CouponType type) {
@@ -167,6 +197,7 @@ public class Coupon {
 
 	/**
 	 * get message method
+	 * 
 	 * @return message
 	 */
 	public String getMessage() {
@@ -175,6 +206,7 @@ public class Coupon {
 
 	/**
 	 * set message method
+	 * 
 	 * @param message
 	 */
 	public void setMessage(String message) {
@@ -183,6 +215,7 @@ public class Coupon {
 
 	/**
 	 * get price method
+	 * 
 	 * @return price
 	 */
 	public double getPrice() {
@@ -191,6 +224,7 @@ public class Coupon {
 
 	/**
 	 * set price method
+	 * 
 	 * @param price
 	 */
 	public void setPrice(double price) {
@@ -199,6 +233,7 @@ public class Coupon {
 
 	/**
 	 * get image method
+	 * 
 	 * @return image
 	 */
 	public String getImage() {
@@ -207,6 +242,7 @@ public class Coupon {
 
 	/**
 	 * set image method
+	 * 
 	 * @param image
 	 */
 	public void setImage(String image) {

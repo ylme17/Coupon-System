@@ -20,7 +20,7 @@ import coupon.sys.core.exceptions.DbException;
 /**
  * this class implements CouponDao interface
  * 
- * @author YECHIEL
+ * @author YECHIEL.MOSHE
  * 
  */
 public class CouponDaoDb implements CouponDao {
@@ -53,8 +53,6 @@ public class CouponDaoDb implements CouponDao {
 			coupon.setId(rs.getLong(1));
 			rs.close();
 			pst.close();
-
-			System.out.println("coupon created [title: " + coupon.getTitle() + ", id: " + coupon.getId() + "]");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -67,8 +65,7 @@ public class CouponDaoDb implements CouponDao {
 	}
 
 	/**
-	 * this method remove coupon by id from coupon table and inner-join tables first
-	 * customer-coupon table, second company-coupon table and finally coupon table
+	 * this method remove coupon by id from coupon table
 	 */
 	@Override
 	public void removeCoupon(Coupon coupon) throws DbException {
@@ -76,19 +73,14 @@ public class CouponDaoDb implements CouponDao {
 		try {
 			connectionpool = ConnectionPool.getInstance();
 			con = connectionpool.getConnection();
-			String removeCustomerCouponSql = "DELETE FROM customer_coupon WHERE coupon_id=" + coupon.getId();
-			String removeCompanyCouponSql = "DELETE FROM company_coupon WHERE coupon_id=" + coupon.getId();
 			String removeCouponSql = "DELETE FROM coupon WHERE id=" + coupon.getId();
 			Statement st = con.createStatement();
-			st.executeUpdate(removeCustomerCouponSql);
-			st.executeUpdate(removeCompanyCouponSql);
 			st.executeUpdate(removeCouponSql);
 			st.close();
-			System.out.println("coupon id: " + coupon.getId() + " was deleted");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
-			throw new DbException("unable to delete coupon " + coupon.toString(), e);
+			throw new DbException("cannot delete coupon " + coupon.getId(), e);
 		} finally {
 			if (con != null)
 				connectionpool.returnConnection(con);
@@ -118,7 +110,6 @@ public class CouponDaoDb implements CouponDao {
 			pst.setString(8, coupon.getImage());
 			pst.executeUpdate();
 			pst.close();
-			System.out.println("coupon id: " + coupon.getId() + ", was updated");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -156,7 +147,6 @@ public class CouponDaoDb implements CouponDao {
 			coupon.setImage(rs.getString("image"));
 			rs.close();
 			st.close();
-			System.out.println(coupon.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -197,7 +187,6 @@ public class CouponDaoDb implements CouponDao {
 			}
 			rs.close();
 			st.close();
-			System.out.println(coupons.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -238,7 +227,6 @@ public class CouponDaoDb implements CouponDao {
 			}
 			rs.close();
 			st.close();
-			System.out.println(coupons.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -248,6 +236,56 @@ public class CouponDaoDb implements CouponDao {
 				connectionpool.returnConnection(con);
 		}
 		return coupons;
+	}
+
+	/**
+	 * this method remove coupons from customer-coupon table by coupon id this
+	 * method help to delete coupon
+	 */
+	@Override
+	public void removeCustomerCoupon(Coupon coupon) throws DbException {
+		Connection con = null;
+		try {
+			connectionpool = ConnectionPool.getInstance();
+			con = connectionpool.getConnection();
+			String removeCustomerCouponSql = "DELETE FROM customer_coupon WHERE coupon_id=" + coupon.getId();
+			Statement st = con.createStatement();
+			st.executeUpdate(removeCustomerCouponSql);
+			st.close();
+		} catch (ConnectionPoolException e) {
+			System.out.println(e);
+		} catch (SQLException e) {
+			throw new DbException("cannot delete coupon " + coupon.getId() + " from customer-coupon table");
+		} finally {
+			if (con != null)
+				connectionpool.returnConnection(con);
+		}
+
+	}
+
+	/**
+	 * this method remove coupons from company-coupon table by coupon id this method
+	 * help to delete coupon
+	 */
+	@Override
+	public void removeCompanyCoupon(Coupon coupon) throws DbException {
+		Connection con = null;
+		try {
+			connectionpool = ConnectionPool.getInstance();
+			con = connectionpool.getConnection();
+			String removeCompanyCouponSql = "DELETE FROM company_coupon WHERE coupon_id=" + coupon.getId();
+			Statement st = con.createStatement();
+			st.executeUpdate(removeCompanyCouponSql);
+			st.close();
+		} catch (ConnectionPoolException e) {
+			System.out.println(e);
+		} catch (SQLException e) {
+			throw new DbException("cannot delete coupon " + coupon.getId() + " from company-coupon table", e);
+		} finally {
+			if (con != null)
+				connectionpool.returnConnection(con);
+		}
+
 	}
 
 	/**
@@ -264,7 +302,6 @@ public class CouponDaoDb implements CouponDao {
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCouponSql);
 			st.close();
-			System.out.println("deleted");
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -286,9 +323,9 @@ public class CouponDaoDb implements CouponDao {
 		try {
 			connectionpool = ConnectionPool.getInstance();
 			con = connectionpool.getConnection();
-			String removeCustomerCouponSql = "DELETE FROM customer_coupon WHERE EXIST (SELECT 1 FROM company, company_coupon, "
-					+ "coupon WHERE company.id=company_coupon.company_id AND company_coupon.coupon_id=coupon.id AND coupon.id=customer_coupon.coupon_id AND company.id="
-					+ company.getId();
+			String removeCustomerCouponSql = "DELETE FROM customer_coupon WHERE customer_coupon.coupon_id IN (SELECT company_coupon.coupon_id "
+					+ "FROM company_coupon WHERE company_coupon.coupon_id=customer_coupon.coupon_id "
+					+ "AND company_coupon.company_id=" + company.getId() + ")";
 			Statement st = con.createStatement();
 			st.executeUpdate(removeCustomerCouponSql);
 			st.close();
@@ -321,11 +358,6 @@ public class CouponDaoDb implements CouponDao {
 			}
 			rs.close();
 			st.close();
-			if (exist) {
-				System.out.println("coupon already exist");
-			} else {
-				System.out.println("coupon not exist");
-			}
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {
@@ -366,7 +398,6 @@ public class CouponDaoDb implements CouponDao {
 			}
 			rs.close();
 			st.close();
-			System.out.println(CouponByDate.toString());
 		} catch (ConnectionPoolException e) {
 			System.out.println(e);
 		} catch (SQLException e) {

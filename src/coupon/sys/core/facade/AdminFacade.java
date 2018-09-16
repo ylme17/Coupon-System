@@ -8,114 +8,216 @@ import coupon.sys.core.beans.Customer;
 import coupon.sys.core.dao.CompanyDao;
 import coupon.sys.core.dao.CouponDao;
 import coupon.sys.core.dao.CustomerDao;
-import coupon.sys.core.exceptions.CouponSystemException;
+import coupon.sys.core.exceptions.DbException;
+import coupon.sys.core.exceptions.ObjectAlreadyExistException;
+import coupon.sys.core.exceptions.ObjectDontExistException;
 
+/**
+ * this class implements the business logic of Admin
+ * 
+ * @author YECHIEL.MOSHE
+ *
+ */
 public class AdminFacade implements ClientFacade {
 
-	private CompanyDao companyDaoDb;
-	private CustomerDao customerDaoDb;
-	private CouponDao couponDaoDb;
+	private CompanyDao companyDao;
+	private CustomerDao customerDao;
+	private CouponDao couponDao;
 
+	/**
+	 * construct the Admin facade and get companyDao, customerDao and couponDao
+	 * 
+	 * @param companyDaoDb
+	 * @param customerDaoDb
+	 * @param couponDaoDb
+	 */
 	public AdminFacade(CompanyDao companyDaoDb, CustomerDao customerDaoDb, CouponDao couponDaoDb) {
-		this.companyDaoDb = companyDaoDb;
-		this.customerDaoDb = customerDaoDb;
-		this.couponDaoDb = couponDaoDb;
-	}
-	
-	public AdminFacade(CompanyDao companyDaoDb, CustomerDao customerDaoDb) {
-		this.companyDaoDb = companyDaoDb;
-		this.customerDaoDb = customerDaoDb;
+		this.companyDao = companyDaoDb;
+		this.customerDao = customerDaoDb;
+		this.couponDao = couponDaoDb;
 	}
 
-	public void createCompany(Company company) throws CouponSystemException {
-		if (companyDaoDb.checkIfExist(company) == false) {
-			companyDaoDb.createCompany(company);
+	/**
+	 * this method create company 
+	 * check if company or customer with same name exist
+	 * 
+	 * @param company
+	 * @throws ObjectAlreadyExistException
+	 * @throws DbException
+	 */
+	public void createCompany(Company company) throws ObjectAlreadyExistException, DbException {
+		if (companyDao.checkIfExist(company) == false && customerDao.checkIfExist(company) == false) {
+			companyDao.createCompany(company);
+			System.out.println("company created, id:" + company.getId() + " name:" + company.getName());
 		} else {
-			throw new CouponSystemException("company " + company.getName() + ", already exist");
+			throw new ObjectAlreadyExistException(company.getName() + " already exist");
 		}
 	}
 
-	public void removeComapny(Company company) {
-		try {
-			couponDaoDb.removeCustomerCoupon(company);
-			couponDaoDb.removeCouponByCompany(company);
-			companyDaoDb.removeCompanyCoupon(company);
-			companyDaoDb.removeCompany(company);
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", company was not removed");
-		}
-	}
-
-	public void updateCompany(Company company) {
-		try {
-			companyDaoDb.updateCompany(company);
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", company was not updated");
-		}
-	}
-
-	public Company getCompany(long id) {
-		Company company = null;
-		try {
-			companyDaoDb.getCompany(id);
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", failed to get company");
-		}
-		return company;
-	}
-
-	public Collection<Company> getAllCompanies() {
-		ArrayList<Company> allCompanies = null;
-		try {
-			allCompanies = (ArrayList<Company>) companyDaoDb.getAllCompanies();
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", failed to get companies collection");
-		}
-		return allCompanies;
-	}
-
-	public void createCustomer(Customer customer) throws CouponSystemException {
-		if (customerDaoDb.checkIfExist(customer)==false) {
-			customerDaoDb.createCustomer(customer);
+	/**
+	 * this method remove company with all coupons first delete coupons from
+	 * customer-coupon table, second delete coupons from coupon table third delete
+	 * coupons from company-coupon table and finally delete the company itself
+	 * 
+	 * @param company
+	 * @throws ObjectDontExistException
+	 * @throws DbException
+	 */
+	public void removeCompany(Company company) throws ObjectDontExistException, DbException {
+		Company companydb = companyDao.getCompany(company.getId());
+		if (companydb != null) {
+			couponDao.removeCustomerCoupon(companydb);
+			couponDao.removeCouponByCompany(companydb);
+			companyDao.removeCompanyCoupon(companydb);
+			companyDao.removeCompany(companydb);
+			System.out.println("company " + company.getId() + " deleted");
 		} else {
-			throw new CouponSystemException("customer was not created");
+			throw new ObjectDontExistException();
 		}
 	}
 
-	public void removeCustomer(Customer customer) {
-		try {
-			customerDaoDb.removeCustomer(customer);
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", customer was not removed");
+	/**
+	 * this method update company, only password and email
+	 * 
+	 * @param company
+	 * @throws DbException
+	 * @throws ObjectDontExistException
+	 */
+	public void updateCompany(Company company) throws DbException, ObjectDontExistException {
+		Company companydb = companyDao.getCompany(company.getId());
+		if (companydb != null) {
+			companydb.setPassword(company.getPassword());
+			companydb.setEmail(company.getEmail());
+			companyDao.updateCompany(companydb);
+			System.out.println("company " + company.getId() + " updated");
+		} else {
+			throw new ObjectDontExistException();
 		}
 	}
 
-	public void updateCustomer(Customer customer) {
-		try {
-			customerDaoDb.updateCustomer(customer);
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", customer was not updated");
+	/**
+	 * this method get all companies
+	 * 
+	 * @return all companies
+	 * @throws ObjectDontExistException
+	 * @throws DbException
+	 */
+	public Collection<Company> getAllCompanies() throws ObjectDontExistException, DbException {
+		Collection<Company> allCompanies = new ArrayList<>();
+		allCompanies = companyDao.getAllCompanies();
+		if (!allCompanies.isEmpty()) {
+			System.out.println(allCompanies.toString());
+			return allCompanies;
+		} else {
+			throw new ObjectDontExistException("no companies");
 		}
 	}
 
-	public Customer getCustomer(long id) {
-		Customer customer = null;
-		try {
-			customerDaoDb.getCustomer(id);
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", failed to get customer");
+	/**
+	 * this method get company by id
+	 * 
+	 * @param id
+	 * @return company
+	 * @throws ObjectDontExistException
+	 * @throws DbException
+	 */
+	public Company getCompany(long id) throws ObjectDontExistException, DbException {
+		Company company = companyDao.getCompany(id);
+		if (company != null) {
+			System.out.println(company.toString());
+			return company;
+		} else {
+			throw new ObjectDontExistException();
 		}
-		return customer;
 	}
 
-	public Collection<Customer> getAllCustomer() {
-		ArrayList<Customer> allCustomers = null;
-		try {
-			allCustomers = (ArrayList<Customer>) customerDaoDb.getAllCustomer();
-		} catch (CouponSystemException e) {
-			System.out.println(e + ", failed to get customers collection");
+	/**
+	 * this method create customer
+	 * check if customer or company with same name exist
+	 * 
+	 * @param customer
+	 * @throws ObjectAlreadyExistException
+	 * @throws DbException
+	 */
+	public void createCustomer(Customer customer) throws ObjectAlreadyExistException, DbException {
+		if (customerDao.checkIfExist(customer) == false && companyDao.checkIfExist(customer) == false) {
+			customerDao.createCustomer(customer);
+			System.out.println("customer created, id:" + customer.getId() + " name:" + customer.getName());
+		} else {
+			throw new ObjectAlreadyExistException(customer.getName() + " already exist");
 		}
-		return allCustomers;
+	}
+
+	/**
+	 * this method remove customer from customer and customer-coupon tables
+	 * 
+	 * @param customer
+	 * @throws ObjectDontExistException
+	 * @throws DbException
+	 */
+	public void removeCustomer(Customer customer) throws ObjectDontExistException, DbException {
+		Customer customerdb = customerDao.getCustomer(customer.getId());
+		if (customerdb != null) {
+			customerDao.removeCustomerCoupon(customerdb);
+			customerDao.removeCustomer(customerdb);
+			System.out.println("customer " + customer.getId() + " deleted");
+		} else {
+			throw new ObjectDontExistException();
+		}
+	}
+
+	/**
+	 * this method update customer, can update only password
+	 * 
+	 * @param customer
+	 * @throws ObjectDontExistException
+	 * @throws DbException
+	 */
+	public void updateCustomer(Customer customer) throws ObjectDontExistException, DbException {
+		Customer customerdb = customerDao.getCustomer(customer.getId());
+		if (customerdb != null) {
+			customerdb.setPassword(customer.getPassword());
+			customerDao.updateCustomer(customerdb);
+			System.out.println("customer " + customer.getId() + " updated");
+		} else {
+			throw new ObjectDontExistException();
+		}
+	}
+
+	/**
+	 * this method get all customers
+	 * 
+	 * @return all customers
+	 * @throws ObjectDontExistException
+	 * @throws DbException
+	 */
+	public Collection<Customer> getAllCustomer() throws ObjectDontExistException, DbException {
+		Collection<Customer> allCustomers = new ArrayList<>();
+		allCustomers = customerDao.getAllCustomer();
+		if (!allCustomers.isEmpty()) {
+			System.out.println(allCustomers.toString());
+			return allCustomers;
+		} else {
+			throw new ObjectDontExistException("there are no customers");
+		}
+	}
+
+	/**
+	 * this method get customer by id
+	 * 
+	 * @param id
+	 * @return customer
+	 * @throws ObjectDontExistException
+	 * @throws DbException
+	 */
+	public Customer getCustomer(long id) throws ObjectDontExistException, DbException {
+		Customer customer = customerDao.getCustomer(id);
+		if (customer != null) {
+			System.out.println(customer.toString());
+			return customer;
+		} else {
+			throw new ObjectDontExistException();
+		}
 	}
 
 }

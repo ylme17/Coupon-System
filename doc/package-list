@@ -1,1 +1,11 @@
+coupon.sys.core.beans
+coupon.sys.core.connectionPool
+coupon.sys.core.couponSystem
+coupon.sys.core.dao
+coupon.sys.core.dao.db
+coupon.sys.core.exceptions
 coupon.sys.core.facade
+coupon.sys.core.thread
+coupon.sys.core.util
+coupon.sys.test
+create.db

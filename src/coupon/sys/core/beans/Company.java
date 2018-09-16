@@ -85,6 +85,7 @@ public class Company {
 
 	/**
 	 * set name method
+	 * 
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -93,6 +94,7 @@ public class Company {
 
 	/**
 	 * get password method
+	 * 
 	 * @return password
 	 */
 	public String getPassword() {
@@ -101,6 +103,7 @@ public class Company {
 
 	/**
 	 * set password method
+	 * 
 	 * @param password
 	 */
 	public void setPassword(String password) {
@@ -109,6 +112,7 @@ public class Company {
 
 	/**
 	 * get email method
+	 * 
 	 * @return email
 	 */
 	public String getEmail() {
@@ -117,6 +121,7 @@ public class Company {
 
 	/**
 	 * set email method
+	 * 
 	 * @param email
 	 */
 	public void setEmail(String email) {
@@ -125,6 +130,7 @@ public class Company {
 
 	/**
 	 * get coupons for company in collection
+	 * 
 	 * @return all coupons
 	 */
 	public Collection<Coupon> getCoupons() {
@@ -133,6 +139,7 @@ public class Company {
 
 	/**
 	 * set coupons for company in collection
+	 * 
 	 * @param coupons
 	 */
 	public void setCoupons(Collection<Coupon> coupons) {
