@@ -3,7 +3,7 @@ package coupon.sys.core.beans;
 import java.util.Date;
 
 /**
- * this class for create objects from coupon type
+ * this class for create objects of coupon type
  * 
  * @author YECHIEL.MOSHE
  *

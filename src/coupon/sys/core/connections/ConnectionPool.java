@@ -72,7 +72,7 @@ public class ConnectionPool {
 			it.remove();
 			return con;
 		} else {
-			throw new ConnectionPoolException("connection pool closed");
+			throw new ConnectionPoolException("cannot get connection, connection pool closed");
 		}
 	}
 

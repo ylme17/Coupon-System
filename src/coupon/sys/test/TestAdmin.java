@@ -10,7 +10,7 @@ import create.db.DropTables;
 
 public class TestAdmin {
 
-	public static void main(String[] args) throws CouponSystemException {
+	public static void main(String[] args) throws CouponSystemException, InterruptedException {
 
 //		DropTables.dropAllTables();
 //		CreateTables.createTables();

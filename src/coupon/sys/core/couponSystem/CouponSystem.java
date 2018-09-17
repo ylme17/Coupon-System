@@ -8,6 +8,7 @@ import coupon.sys.core.dao.CustomerDAO;
 import coupon.sys.core.dao.db.CompanyDAODb;
 import coupon.sys.core.dao.db.CouponDAODb;
 import coupon.sys.core.dao.db.CustomerDAODb;
+import coupon.sys.core.exceptions.ConnectionPoolException;
 import coupon.sys.core.exceptions.CouponSystemException;
 import coupon.sys.core.exceptions.DbException;
 import coupon.sys.core.exceptions.LoginException;
@@ -29,7 +30,6 @@ public class CouponSystem {
 	private CompanyDAO companyDAO;
 	private DailyCouponExpirationTask dailyCouponExpirationTask;
 	private ClientFacade clientFacade;
-	private ConnectionPool connectionPool;
 	private static CouponSystem instance;
 
 	private CouponSystem() throws CouponSystemException {
@@ -70,6 +70,7 @@ public class CouponSystem {
 		try {
 			if (name.equals("admin") && password.equals("1234")) {
 				clientFacade = new AdminFacade(companyDAO, customerDAO, couponDAO);
+				System.out.println("admin logged");
 			} else if (companyDAO.login(name, password)) {
 				clientFacade = new CompanyFacade(couponDAO, companyDAO, companyDAO.getCompany(name));
 				System.out.println("company " + name + " logged");
@@ -91,9 +92,13 @@ public class CouponSystem {
 	 * @throws CouponSystemException
 	 * @throws InterruptedException
 	 */
-	public void shutDown() throws CouponSystemException, InterruptedException {
-		this.dailyCouponExpirationTask.stopTask();
-		this.connectionPool.closeAllConnections();
+	public void shutDown() throws ConnectionPoolException, InterruptedException {
+		try {
+			dailyCouponExpirationTask.stopTask();
+			ConnectionPool.getInstance().closeAllConnections();
+		} catch (ConnectionPoolException | InterruptedException e) {
+			System.err.println("cannot shutdown the system");
+		}
 	}
 
 }
