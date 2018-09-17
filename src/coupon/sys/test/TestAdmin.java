@@ -20,35 +20,29 @@ public class TestAdmin {
 
 			AdminFacade adminFacade = (AdminFacade) couponSystem.login("admin", "1234");
 
-			adminFacade.createCompany(new Company(1, "isracard", "12345", "isracard@gmail"));
-			adminFacade.createCompany(new Company(2, "cal", "0987", "cal@gmail"));
-			adminFacade.createCompany(new Company(3, "teva", "765", "teva@gmail"));
-			adminFacade.createCompany(new Company(4, "checkpoint", "543", "checkpoint@gmail"));
-			adminFacade.createCompany(new Company(5, "zim", "756", "zim@gmail"));
-			adminFacade.createCompany(new Company(6, "shufersal", "795", "shufersal@gmail"));
-			adminFacade.createCompany(new Company(7, "IAI", "1q2w3e", "IAI@gmail"));
+			adminFacade.createCompany(new Company(TestData.companyNameTeva, TestData.companyPasswordTeva, TestData.companyEmailTeva));
+			adminFacade.createCompany(new Company(TestData.companyNameCheckPoint, TestData.companyPasswordCheckPoint, TestData.companyEmailCheckPoint));
+			adminFacade.createCompany(new Company(TestData.companyNameZIM, TestData.companyPasswordZIM, TestData.companyEmailZIM));
 
-			adminFacade.removeCompany(new Company(6));
+//			adminFacade.removeCompany(new Company(6));
+//
+//			adminFacade.updateCompany(new Company("zim", "6337485", "zimShipping@gmail"));
+//
+//			adminFacade.getAllCompanies();
+//
+//			adminFacade.getCompany(4);
 
-			adminFacade.updateCompany(new Company(3, "teva", "934", "tevaIndustries@gmail"));
-			adminFacade.updateCompany(new Company(5, "zim", "635", "zimShipping@gmail"));
+			adminFacade.createCustomer(new Customer(TestData.customerNameAvi, TestData.customerPasswordAvi));
+			adminFacade.createCustomer(new Customer(TestData.customerNameYossi, TestData.customerPasswordYossi));
+			adminFacade.createCustomer(new Customer(TestData.customerNameDavid, TestData.customerPasswordDavid));
 
-			adminFacade.getAllCompanies();
-
-			adminFacade.getCompany(4);
-
-			adminFacade.createCustomer(new Customer(1, "avi", "9748"));
-			adminFacade.createCustomer(new Customer(2, "yossi", "563"));
-			adminFacade.createCustomer(new Customer(3, "david", "05t"));
-			adminFacade.createCustomer(new Customer(4, "yoni", "h765"));
-
-			adminFacade.removeCustomer(new Customer(4));
-
-			adminFacade.updateCustomer(new Customer(2, "david", "2956"));
-
-			adminFacade.getAllCustomer();
-
-			adminFacade.getCustomer(2);
+//			adminFacade.removeCustomer(new Customer(4));
+//
+//			adminFacade.updateCustomer(new Customer("david", "2939156"));
+//
+//			adminFacade.getAllCustomer();
+//
+//			adminFacade.getCustomer(2);
 
 		} catch (CouponSystemException e) {
 			System.out.println(e);

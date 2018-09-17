@@ -12,34 +12,37 @@ public class TestCustomer {
 		try {
 			CouponSystem couponSystem = CouponSystem.getInstance();
 
-			CustomerFacade customerFacade1 = (CustomerFacade) couponSystem.login("yossi", "563");
+			//1st customer
+			CustomerFacade customerFacade1 = (CustomerFacade) couponSystem.login(TestData.customerNameYossi, TestData.customerPasswordYossi);
 
-			customerFacade1.purchaseCoupon(new Coupon(21));
-			customerFacade1.purchaseCoupon(new Coupon(22));
-			customerFacade1.purchaseCoupon(new Coupon(24));
-			customerFacade1.purchaseCoupon(new Coupon(27));
-			customerFacade1.purchaseCoupon(new Coupon(23));
+			customerFacade1.purchaseCoupon(new Coupon(2));
+			customerFacade1.purchaseCoupon(new Coupon(4));
+			customerFacade1.purchaseCoupon(new Coupon(8));
+			customerFacade1.purchaseCoupon(new Coupon(3));
+			customerFacade1.purchaseCoupon(new Coupon(7));
 
-			customerFacade1.getAllPurchasedCoupons();
+//			customerFacade1.getAllPurchasedCoupons();
 
-			CustomerFacade customerFacade2 = (CustomerFacade) couponSystem.login("david", "2956");
+			//2nd customer
+			CustomerFacade customerFacade2 = (CustomerFacade) couponSystem.login(TestData.customerNameDavid, TestData.customerPasswordDavid);
 
-			customerFacade2.purchaseCoupon(new Coupon(29));
-			customerFacade2.purchaseCoupon(new Coupon(23));
-			customerFacade2.purchaseCoupon(new Coupon(27));
-			customerFacade2.purchaseCoupon(new Coupon(21));
-			customerFacade2.purchaseCoupon(new Coupon(26));
-			customerFacade2.purchaseCoupon(new Coupon(24));
+			customerFacade2.purchaseCoupon(new Coupon(9));
+			customerFacade2.purchaseCoupon(new Coupon(4));
+			customerFacade2.purchaseCoupon(new Coupon(5));
+			customerFacade2.purchaseCoupon(new Coupon(2));
+			customerFacade2.purchaseCoupon(new Coupon(8));
+			customerFacade2.purchaseCoupon(new Coupon(1));
 
-			customerFacade2.getAllPurchasedCouponsByType(CouponType.RESTURANTS);
+//			customerFacade2.getAllPurchasedCouponsByType(CouponType.RESTURANTS);
 
-			CustomerFacade customerFacade3 = (CustomerFacade) couponSystem.login("avi", "9748");
+			//3rd customer
+			CustomerFacade customerFacade3 = (CustomerFacade) couponSystem.login(TestData.customerNameAvi, TestData.customerPasswordAvi);
 
-			customerFacade3.purchaseCoupon(new Coupon(27));
-			customerFacade3.purchaseCoupon(new Coupon(21));
-			customerFacade3.purchaseCoupon(new Coupon(29));
+			customerFacade3.purchaseCoupon(new Coupon(2));
+			customerFacade3.purchaseCoupon(new Coupon(6));
+			customerFacade3.purchaseCoupon(new Coupon(9));
 
-			customerFacade3.getAllPurchasedCouponsByPrice(200);
+//			customerFacade3.getAllPurchasedCouponsByPrice(200);
 
 		} catch (CouponSystemException e) {
 			System.out.println(e);

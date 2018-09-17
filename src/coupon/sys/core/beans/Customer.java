@@ -28,6 +28,18 @@ public class Customer {
 		this.name = name;
 		this.password = password;
 	}
+	
+	/**
+	 * construct customer object and get name and password
+	 * 
+	 * @param name     name of customer
+	 * @param password password of customer
+	 */
+	public Customer(String name, String password) {
+		super();
+		this.name = name;
+		this.password = password;
+	}
 
 	/**
 	 * construct customer object and get only id

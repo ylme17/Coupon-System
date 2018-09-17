@@ -49,7 +49,7 @@ public class DailyCouponExpirationTask implements Runnable {
 			Thread.sleep(1000 * 60 * 60 * 24);
 		} catch (DbException e) {
 			System.out.println(e + ", failed to remove expired coupons");
-		} catch (InterruptedException e) {
+		} catch (InterruptedException | NullPointerException e) {
 			System.out.println("daily expiration task stop working");
 		}
 	}

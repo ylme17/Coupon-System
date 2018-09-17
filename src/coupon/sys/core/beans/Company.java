@@ -31,6 +31,20 @@ public class Company {
 		this.password = password;
 		this.email = email;
 	}
+	
+	/**
+	 * construct company object and get name, password and email
+	 * 
+	 * @param name     name of company
+	 * @param password password of company for client login
+	 * @param email    email of company
+	 */
+	public Company(String name, String password, String email) {
+		super();
+		this.name = name;
+		this.password = password;
+		this.email = email;
+	}
 
 	/**
 	 * empty constructor

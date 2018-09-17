@@ -47,8 +47,16 @@ public class AdminFacade implements ClientFacade {
 	 */
 	public void createCompany(Company company) throws ObjectAlreadyExistException, DbException {
 		if (companyDAO.checkIfExist(company) == false && customerDAO.checkIfExist(company) == false) {
-			companyDAO.createCompany(company);
-			System.out.println("company created, id:" + company.getId() + " name:" + company.getName());
+			if(company.getPassword().length()>=5) {
+				if(company.getPassword().length()<=8) {
+					companyDAO.createCompany(company);
+					System.out.println("company created, id:" + company.getId() + " name:" + company.getName());
+				} else {
+					System.out.println("password too long");
+				}
+			} else {
+				System.out.println("password too short");
+			}
 		} else {
 			throw new ObjectAlreadyExistException(company.getName() + " already exist");
 		}
@@ -88,8 +96,16 @@ public class AdminFacade implements ClientFacade {
 		if (companydb != null) {
 			companydb.setPassword(company.getPassword());
 			companydb.setEmail(company.getEmail());
-			companyDAO.updateCompany(companydb);
-			System.out.println("company " + company.getId() + " updated");
+			if(company.getPassword().length()>=5) {
+				if(company.getPassword().length()<=8) {
+					companyDAO.updateCompany(companydb);
+					System.out.println("company " + company.getId() + " updated");
+				} else {
+					System.out.println("password too long");
+				}
+			} else {
+				System.out.println("password too short");
+			}
 		} else {
 			throw new ObjectDontExistException();
 		}
@@ -141,8 +157,16 @@ public class AdminFacade implements ClientFacade {
 	 */
 	public void createCustomer(Customer customer) throws ObjectAlreadyExistException, DbException {
 		if (customerDAO.checkIfExist(customer) == false && companyDAO.checkIfExist(customer) == false) {
-			customerDAO.createCustomer(customer);
-			System.out.println("customer created, id:" + customer.getId() + " name:" + customer.getName());
+			if(customer.getPassword().length()>=5) {
+				if(customer.getPassword().length()<=8) {
+					customerDAO.createCustomer(customer);
+					System.out.println("customer created, id:" + customer.getId() + " name:" + customer.getName());
+				} else {
+					System.out.println("password too long");
+				}
+			} else {
+				System.out.println("password too short");
+			}
 		} else {
 			throw new ObjectAlreadyExistException(customer.getName() + " already exist");
 		}
@@ -177,8 +201,16 @@ public class AdminFacade implements ClientFacade {
 		Customer customerdb = customerDAO.getCustomer(customer.getId());
 		if (customerdb != null) {
 			customerdb.setPassword(customer.getPassword());
-			customerDAO.updateCustomer(customerdb);
-			System.out.println("customer " + customer.getId() + " updated");
+			if(customer.getPassword().length()>=5) {
+				if(customer.getPassword().length()<=8) {
+					customerDAO.updateCustomer(customerdb);
+					System.out.println("customer " + customer.getId() + " updated");
+				} else {
+					System.out.println("password too long");
+				}
+			} else {
+				System.out.println("password too short");
+			}
 		} else {
 			throw new ObjectDontExistException();
 		}
