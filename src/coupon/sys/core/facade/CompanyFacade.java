@@ -20,9 +20,9 @@ import coupon.sys.core.exceptions.ObjectDontExistException;
  */
 public class CompanyFacade implements ClientFacade {
 
-	private CouponDAO couponDAO;
-	private CompanyDAO companyDAO;
 	private Company company;
+	private CompanyDAO companyDAO;
+	private CouponDAO couponDAO;
 
 	/**
 	 * construct the company facade and get company, companyDao and couponDao
