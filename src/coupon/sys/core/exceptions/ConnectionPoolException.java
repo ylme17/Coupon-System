@@ -6,7 +6,7 @@ package coupon.sys.core.exceptions;
  * @author YECHIEL.MOSHE
  *
  */
-public class ConnectionPoolException extends CouponSystemException {
+public class ConnectionPoolException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
