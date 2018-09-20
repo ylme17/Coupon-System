@@ -21,10 +21,10 @@ public class TestAdmin {
 			AdminFacade adminFacade = (AdminFacade) couponSystem.login("admin", "1234");
 
 			adminFacade.createCompany(new Company(TestData.companyNameTeva, TestData.companyPasswordTeva, TestData.companyEmailTeva));
-//			adminFacade.createCompany(new Company(TestData.companyNameCheckPoint, TestData.companyPasswordCheckPoint, TestData.companyEmailCheckPoint));
-//			adminFacade.createCompany(new Company(TestData.companyNameZIM, TestData.companyPasswordZIM, TestData.companyEmailZIM));
+			adminFacade.createCompany(new Company(TestData.companyNameCheckPoint, TestData.companyPasswordCheckPoint, TestData.companyEmailCheckPoint));
+			adminFacade.createCompany(new Company(TestData.companyNameZIM, TestData.companyPasswordZIM, TestData.companyEmailZIM));
 //
-//			adminFacade.removeCompany(new Company(6));
+//			adminFacade.removeCompany(new Company(5));
 //
 //			adminFacade.updateCompany(new Company("zim", "6337485", "zimShipping@gmail"));
 //
@@ -32,9 +32,9 @@ public class TestAdmin {
 //
 //			adminFacade.getCompany(4);
 //
-//			adminFacade.createCustomer(new Customer(TestData.customerNameAvi, TestData.customerPasswordAvi));
-//			adminFacade.createCustomer(new Customer(TestData.customerNameYossi, TestData.customerPasswordYossi));
-//			adminFacade.createCustomer(new Customer(TestData.customerNameDavid, TestData.customerPasswordDavid));
+			adminFacade.createCustomer(new Customer(TestData.customerNameAvi, TestData.customerPasswordAvi));
+			adminFacade.createCustomer(new Customer(TestData.customerNameYossi, TestData.customerPasswordYossi));
+			adminFacade.createCustomer(new Customer(TestData.customerNameDavid, TestData.customerPasswordDavid));
 //
 //			adminFacade.removeCustomer(new Customer(4));
 //
