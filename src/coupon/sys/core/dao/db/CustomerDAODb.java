@@ -25,6 +25,7 @@ import coupon.sys.core.exceptions.DbException;
  */
 public class CustomerDAODb implements CustomerDAO {
 
+	private Customer loggedInCustomer;
 	private ConnectionPool connectionPool;
 
 	/**
@@ -139,36 +140,36 @@ public class CustomerDAODb implements CustomerDAO {
 		return customer;
 	}
 
-	/**
-	 * this method get customer by name
-	 */
-	@Override
-	public Customer getCustomer(String name) throws DbException {
-		Connection con = null;
-		Customer customer = null;
-		try {
-			connectionPool = ConnectionPool.getInstance();
-			con = connectionPool.getConnection();
-			String getCustomerSql = "SELECT * FROM customer WHERE customer_name='" + name + "'";
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(getCustomerSql);
-			customer = new Customer();
-			rs.next();
-			customer.setId(rs.getLong("id"));
-			customer.setName(rs.getString("customer_name"));
-			customer.setPassword(rs.getString("password"));
-			rs.close();
-			st.close();
-		} catch (ConnectionPoolException e) {
-			System.out.println(e);
-		} catch (SQLException e) {
-			throw new DbException("cannot get customer[name: " + customer.getName() + "]");
-		} finally {
-			if (con != null)
-				connectionPool.returnConnection(con);
-		}
-		return customer;
-	}
+//	/**
+//	 * this method get customer by name
+//	 */
+//	@Override
+//	public Customer getCustomer() throws DbException {
+//		Connection con = null;
+//		Customer customer = null;
+//		try {
+//			connectionPool = ConnectionPool.getInstance();
+//			con = connectionPool.getConnection();
+//			String getCustomerSql = "SELECT * FROM customer WHERE customer_name='" + loggedInCustomer.getName() + "'";
+//			Statement st = con.createStatement();
+//			ResultSet rs = st.executeQuery(getCustomerSql);
+//			customer = new Customer();
+//			rs.next();
+//			customer.setId(rs.getLong("id"));
+//			customer.setName(rs.getString("customer_name"));
+//			customer.setPassword(rs.getString("password"));
+//			rs.close();
+//			st.close();
+//		} catch (ConnectionPoolException e) {
+//			System.out.println(e);
+//		} catch (SQLException e) {
+//			throw new DbException("cannot get customer[name: " + customer.getName() + "]");
+//		} finally {
+//			if (con != null)
+//				connectionPool.returnConnection(con);
+//		}
+//		return customer;
+//	}
 
 	/**
 	 * this method get all customers inside collection
@@ -208,7 +209,7 @@ public class CustomerDAODb implements CustomerDAO {
 	 * this method get all coupons per customer inside collection
 	 */
 	@Override
-	public Collection<Coupon> getCoupons(Customer customer) throws DbException {
+	public Collection<Coupon> getCoupons() throws DbException {
 		Connection con = null;
 		ArrayList<Coupon> coupons = null;
 		try {
@@ -216,7 +217,7 @@ public class CustomerDAODb implements CustomerDAO {
 			con = connectionPool.getConnection();
 			coupons = new ArrayList<Coupon>();
 			String getCouponsSql = "SELECT * FROM coupon INNER JOIN customer_coupon ON id=customer_coupon.coupon_id "
-					+ "WHERE customer_coupon.customer_id=" + customer.getId();
+					+ "WHERE customer_coupon.customer_id=" + loggedInCustomer.getId();
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getCouponsSql);
 			while (rs.next()) {
@@ -255,12 +256,13 @@ public class CustomerDAODb implements CustomerDAO {
 		try {
 			connectionPool = ConnectionPool.getInstance();
 			con = connectionPool.getConnection();
-			String loginSql = "SELECT customer_name, password FROM customer WHERE customer_name='" + name + "'";
+			String loginSql = "SELECT * FROM customer WHERE customer_name='" + name + "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(loginSql);
 			if (rs.next()) {
 				if (rs.getString("password").equals(password)) {
 					loginSuccess = true;
+					loggedInCustomer = new Customer(rs.getLong(1), rs.getString(2), rs.getString(3));
 				}
 			}
 			rs.close();
@@ -281,14 +283,14 @@ public class CustomerDAODb implements CustomerDAO {
 	 * coupon id with customer-coupon table
 	 */
 	@Override
-	public boolean alreadyPurchased(long customerId, long couponId) throws DbException {
+	public boolean alreadyPurchased(long couponId) throws DbException {
 		Connection con = null;
 		boolean purchased = false;
 		try {
 			connectionPool = ConnectionPool.getInstance();
 			con = connectionPool.getConnection();
-			String alreadyPurchasedSql = "SELECT coupon_id FROM customer_coupon WHERE customer_id=" + customerId
-					+ "AND coupon_id=" + couponId;
+			String alreadyPurchasedSql = "SELECT coupon_id FROM customer_coupon WHERE customer_id="
+					+ loggedInCustomer.getId() + "AND coupon_id=" + couponId;
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(alreadyPurchasedSql);
 			if (rs.next()) {
@@ -311,13 +313,13 @@ public class CustomerDAODb implements CustomerDAO {
 	 * this method insert the coupon purchase to customer-coupon table
 	 */
 	@Override
-	public void insertCouponPurchase(long customerId, long couponId) throws DbException {
+	public void insertCouponPurchase(long couponId) throws DbException {
 		Connection con = null;
 		try {
 			connectionPool = ConnectionPool.getInstance();
 			con = connectionPool.getConnection();
-			String insertCouponSql = "INSERT INTO customer_coupon (customer_id, coupon_id) VALUES(" + customerId + ", "
-					+ couponId + ")";
+			String insertCouponSql = "INSERT INTO customer_coupon (customer_id, coupon_id) VALUES("
+					+ loggedInCustomer.getId() + ", " + couponId + ")";
 			Statement st = con.createStatement();
 			st.execute(insertCouponSql);
 			st.close();
@@ -336,14 +338,15 @@ public class CustomerDAODb implements CustomerDAO {
 	 * this method get coupons per customer by type inside collection
 	 */
 	@Override
-	public Collection<Coupon> getCouponsByType(Customer customer, CouponType type) throws DbException {
+	public Collection<Coupon> getCouponsByType(CouponType type) throws DbException {
 		Connection con = null;
 		Collection<Coupon> couponByType = new ArrayList<>();
 		try {
 			connectionPool = ConnectionPool.getInstance();
 			con = connectionPool.getConnection();
-			String couponByTypeSql = "SELECT co.* FROM customer_coupon cc, coupon co WHERE cc.coupon_id=co.id "
-					+ "AND cc.customer_id=" + customer.getId() + " AND co.type='" + type.name() + "'";
+			String couponByTypeSql = "SELECT coupon.* FROM customer_coupon, coupon WHERE customer_coupon.coupon_id=coupon.id "
+					+ "AND customer_coupon.customer_id=" + loggedInCustomer.getId() + " AND coupon.type='" + type.name()
+					+ "'";
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(couponByTypeSql);
 			while (rs.next()) {
@@ -376,14 +379,14 @@ public class CustomerDAODb implements CustomerDAO {
 	 * this method get coupons per customer by price inside collection
 	 */
 	@Override
-	public Collection<Coupon> getCouponsByPrice(Customer customer, double Price) throws DbException {
+	public Collection<Coupon> getCouponsByPrice(double Price) throws DbException {
 		Connection con = null;
 		Collection<Coupon> couponByPrice = new ArrayList<>();
 		try {
 			connectionPool = ConnectionPool.getInstance();
 			con = connectionPool.getConnection();
 			String couponByPriceSql = "SELECT coupon.* FROM customer_coupon, coupon WHERE customer_coupon.coupon_id=coupon.id "
-					+ "AND customer_coupon.customer_id=" + customer.getId() + " AND coupon.price<=" + Price;
+					+ "AND customer_coupon.customer_id=" + loggedInCustomer.getId() + " AND coupon.price<=" + Price;
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(couponByPriceSql);
 			while (rs.next()) {

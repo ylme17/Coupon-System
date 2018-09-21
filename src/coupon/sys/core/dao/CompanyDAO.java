@@ -36,6 +36,11 @@ public interface CompanyDAO {
 	 * this method get specific company by id
 	 */
 	public Company getCompany(long id) throws DbException;
+	
+	/**
+	 * this method get the logged in company by id
+	 */
+	public Company getCompany() throws DbException;
 
 	/**
 	 * this method get all companies
@@ -45,7 +50,7 @@ public interface CompanyDAO {
 	/**
 	 * this method get all coupons by company
 	 */
-	public Collection<Coupon> getCoupons(Company company) throws DbException;
+	public Collection<Coupon> getCoupons() throws DbException;
 
 	/**
 	 * this method use to login for company client
@@ -70,31 +75,31 @@ public interface CompanyDAO {
 	/**
 	 * this method insert coupon to company-coupon table when coupon created
 	 */
-	public void insertCouponCreation(long companyId, long couponId) throws DbException;
+	public void insertCouponCreation(long couponId) throws DbException;
 
 	/**
 	 * this method check if coupon belong to specific company
 	 */
-	public boolean couponBelongComapny(long companyId, long couponId) throws DbException;
+	public boolean couponBelongComapny(long couponId) throws DbException;
 
 	/**
 	 * this method get the coupon by type and company
 	 */
-	public Collection<Coupon> getCouponByType(Company company, CouponType type) throws DbException;
+	public Collection<Coupon> getCouponByType(CouponType type) throws DbException;
 
-	/**
-	 * this method get specific company by name
-	 */
-	public Company getCompany(String name) throws DbException;
+//	/**
+//	 * this method get specific company by name
+//	 */
+//	public Company getCompany(String name) throws DbException;
 
 	/**
 	 * this method get coupons per company by price inside collection
 	 */
-	public Collection<Coupon> getCouponsByPrice(Company company, double Price) throws DbException;
+	public Collection<Coupon> getCouponsByPrice(double Price) throws DbException;
 
 	/**
 	 * this method get coupons by date for company inside collection
 	 */
-	public Collection<Coupon> getCouponsByStartDate(Company company, Date date) throws DbException;
+	public Collection<Coupon> getCouponsByStartDate(Date date) throws DbException;
 
 }

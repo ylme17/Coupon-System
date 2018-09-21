@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import coupon.sys.core.beans.Coupon;
 import coupon.sys.core.beans.CouponType;
-import coupon.sys.core.beans.Customer;
 import coupon.sys.core.dao.CouponDAO;
 import coupon.sys.core.dao.CustomerDAO;
 import coupon.sys.core.exceptions.CouponSystemException;
@@ -21,7 +20,6 @@ import coupon.sys.core.utils.CurrentDate;
  */
 public class CustomerFacade implements ClientFacade {
 
-	private Customer customer;
 	private CustomerDAO customerDAO;
 	private CouponDAO couponDAO;
 
@@ -30,12 +28,10 @@ public class CustomerFacade implements ClientFacade {
 	 * 
 	 * @param customerDAO
 	 * @param couponDAO
-	 * @param customer
 	 */
-	public CustomerFacade(CustomerDAO customerDAO, CouponDAO couponDAO, Customer customer) {
+	public CustomerFacade(CustomerDAO customerDAO, CouponDAO couponDAO) {
 		this.customerDAO = customerDAO;
 		this.couponDAO = couponDAO;
-		this.customer = customer;
 	}
 
 	/**
@@ -49,10 +45,10 @@ public class CustomerFacade implements ClientFacade {
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
 		Coupon coupondb = couponDAO.getCoupon(coupon.getId());
 		if (coupondb != null) {
-			if (customerDAO.alreadyPurchased(customer.getId(), coupondb.getId()) == false) {
+			if (customerDAO.alreadyPurchased(coupondb.getId()) == false) {
 				if (coupondb.getAmount() >= 1) {
 					if (CurrentDate.getCurrentDate().before(coupondb.getEndDate())) {
-						customerDAO.insertCouponPurchase(customer.getId(), coupondb.getId());
+						customerDAO.insertCouponPurchase(coupondb.getId());
 						coupondb.setAmount(coupondb.getAmount() - 1);
 						couponDAO.updateCoupon(coupondb);
 						System.out.println("coupon purchased");
@@ -78,7 +74,7 @@ public class CustomerFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getAllPurchasedCoupons() throws ObjectDontExistException, DbException {
-		Collection<Coupon> purchasedCoupons = customerDAO.getCoupons(customer);
+		Collection<Coupon> purchasedCoupons = customerDAO.getCoupons();
 		if (!purchasedCoupons.isEmpty()) {
 			System.out.println(purchasedCoupons.toString());
 			return purchasedCoupons;
@@ -98,7 +94,7 @@ public class CustomerFacade implements ClientFacade {
 	 */
 	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType type)
 			throws ObjectDontExistException, DbException {
-		Collection<Coupon> purchasedCouponByType = customerDAO.getCouponsByType(customer, type);
+		Collection<Coupon> purchasedCouponByType = customerDAO.getCouponsByType(type);
 		if (!purchasedCouponByType.isEmpty()) {
 			System.out.println(purchasedCouponByType.toString());
 			return purchasedCouponByType;
@@ -116,7 +112,7 @@ public class CustomerFacade implements ClientFacade {
 	 * @throws DbException
 	 */
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(double price) throws ObjectDontExistException, DbException {
-		Collection<Coupon> purchasedCouponByPrice = customerDAO.getCouponsByPrice(customer, price);
+		Collection<Coupon> purchasedCouponByPrice = customerDAO.getCouponsByPrice(price);
 		if (!purchasedCouponByPrice.isEmpty()) {
 			System.out.println(purchasedCouponByPrice.toString());
 			return purchasedCouponByPrice;

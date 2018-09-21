@@ -44,7 +44,7 @@ public interface CustomerDAO {
 	/**
 	 * this method get all coupons per customer inside collection
 	 */
-	public Collection<Coupon> getCoupons(Customer customer) throws DbException;
+	public Collection<Coupon> getCoupons() throws DbException;
 
 	/**
 	 * this is a login method for customer
@@ -55,22 +55,22 @@ public interface CustomerDAO {
 	 * this method check if customer purchased the coupon already by customer id and
 	 * coupon id with customer-coupon table
 	 */
-	public boolean alreadyPurchased(long customerId, long couponId) throws DbException;
+	public boolean alreadyPurchased(long couponId) throws DbException;
 
 	/**
 	 * this method insert the coupon purchase to customer-coupon table
 	 */
-	public void insertCouponPurchase(long customerId, long couponId) throws DbException;
+	public void insertCouponPurchase(long couponId) throws DbException;
 
 	/**
 	 * this method get coupons per customer by type inside collection
 	 */
-	public Collection<Coupon> getCouponsByType(Customer customer, CouponType type) throws DbException;
+	public Collection<Coupon> getCouponsByType(CouponType type) throws DbException;
 
 	/**
 	 * this method get coupons per customer by price inside collection
 	 */
-	public Collection<Coupon> getCouponsByPrice(Customer customer, double Price) throws DbException;
+	public Collection<Coupon> getCouponsByPrice(double Price) throws DbException;
 
 	/**
 	 * this method check if customer already exist in db
@@ -87,9 +87,9 @@ public interface CustomerDAO {
 	 */
 	public void removeCustomerCoupon(Customer customer) throws DbException;
 
-	/**
-	 * this method get customer by name
-	 */
-	public Customer getCustomer(String name) throws DbException;
+//	/**
+//	 * this method get customer by name
+//	 */
+//	public Customer getCustomer(String name) throws DbException;
 
 }

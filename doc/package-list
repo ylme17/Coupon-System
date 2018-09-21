@@ -1,11 +1,1 @@
-coupon.sys.core.beans
-coupon.sys.core.connections
-coupon.sys.core.couponSystem
-coupon.sys.core.dailyTask
-coupon.sys.core.dao
 coupon.sys.core.dao.db
-coupon.sys.core.exceptions
-coupon.sys.core.facade
-coupon.sys.core.utils
-coupon.sys.test
-create.db

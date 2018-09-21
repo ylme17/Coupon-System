@@ -72,10 +72,10 @@ public class CouponSystem {
 				clientFacade = new AdminFacade(companyDAO, customerDAO, couponDAO);
 				System.out.println("admin logged");
 			} else if (companyDAO.login(name, password)) {
-				clientFacade = new CompanyFacade(couponDAO, companyDAO, companyDAO.getCompany(name));
+				clientFacade = new CompanyFacade(couponDAO, companyDAO);
 				System.out.println("company " + name + " logged");
 			} else if (customerDAO.login(name, password)) {
-				clientFacade = new CustomerFacade(customerDAO, couponDAO, customerDAO.getCustomer(name));
+				clientFacade = new CustomerFacade(customerDAO, couponDAO);
 				System.out.println("customer " + name + " logged");
 			} else {
 				throw new LoginException();
