@@ -223,7 +223,7 @@ public class AdminFacade implements ClientFacade {
 	 * @throws ObjectDontExistException
 	 * @throws DbException
 	 */
-	public Collection<Customer> getAllCustomer() throws ObjectDontExistException, DbException {
+	public Collection<Customer> getAllCustomers() throws ObjectDontExistException, DbException {
 		Collection<Customer> allCustomers = new ArrayList<>();
 		allCustomers = customerDAO.getAllCustomer();
 		if (!allCustomers.isEmpty()) {

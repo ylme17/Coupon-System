@@ -40,7 +40,7 @@ public class TestAdmin {
 //
 //			adminFacade.updateCustomer(new Customer("david", "2939156"));
 //
-//			adminFacade.getAllCustomer();
+//			adminFacade.getAllCustomers();
 //
 //			adminFacade.getCustomer(2);
 
