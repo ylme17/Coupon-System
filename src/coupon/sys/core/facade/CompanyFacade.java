@@ -44,6 +44,7 @@ public class CompanyFacade implements ClientFacade {
 	 */
 	public void createCoupon(Coupon coupon) throws ObjectAlreadyExistException, DbException {
 		if (couponDAO.checkIfExist(coupon) == false) {
+			coupon.setStartDate(CurrentDate.getCurrentDate());
 			couponDAO.createCoupon(coupon);
 			companyDAO.insertCouponCreation(coupon.getId());
 			System.out.println("coupon created [title: " + coupon.getTitle() + ", id: " + coupon.getId() + "]");
