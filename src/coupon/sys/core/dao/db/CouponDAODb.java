@@ -134,17 +134,18 @@ public class CouponDAODb implements CouponDAO {
 			String getCouponSql = "SELECT * FROM coupon WHERE id=" + id;
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(getCouponSql);
-			coupon = new Coupon();
-			rs.next();
-			coupon.setId(rs.getLong("id"));
-			coupon.setTitle(rs.getString("title"));
-			coupon.setStartDate(rs.getDate("start_date"));
-			coupon.setEndDate(rs.getDate("end_date"));
-			coupon.setAmount(rs.getInt("amount"));
-			coupon.setType(CouponType.valueOf(rs.getString("type")));
-			coupon.setMessage(rs.getString("message"));
-			coupon.setPrice(rs.getDouble("price"));
-			coupon.setImage(rs.getString("image"));
+			if(rs.next()) {
+				coupon = new Coupon();
+				coupon.setId(rs.getLong("id"));
+				coupon.setTitle(rs.getString("title"));
+				coupon.setStartDate(rs.getDate("start_date"));
+				coupon.setEndDate(rs.getDate("end_date"));
+				coupon.setAmount(rs.getInt("amount"));
+				coupon.setType(CouponType.valueOf(rs.getString("type")));
+				coupon.setMessage(rs.getString("message"));
+				coupon.setPrice(rs.getDouble("price"));
+				coupon.setImage(rs.getString("image"));
+			}
 			rs.close();
 			st.close();
 		} catch (ConnectionPoolException e) {

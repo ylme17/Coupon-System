@@ -33,11 +33,11 @@ public class CouponSystem {
 	private static CouponSystem instance;
 
 	private CouponSystem() throws CouponSystemException {
-		dailyCouponExpirationTask = new DailyCouponExpirationTask();
 		couponDAO = new CouponDAODb();
 		customerDAO = new CustomerDAODb();
 		companyDAO = new CompanyDAODb();
 
+		dailyCouponExpirationTask = new DailyCouponExpirationTask();
 		Thread dailyCouponExpirationTaskThread = new Thread(dailyCouponExpirationTask,
 				"daily expiration deleting task");
 		dailyCouponExpirationTaskThread.start();
